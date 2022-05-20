@@ -53,4 +53,4 @@ jobs:
           pip install pylint
           pip install .
       - name: Run tests
-        run: pylint ./src ./test --max-line-length=120
+        run: pylint ./src ./test --max-line-length=120 --rcfile=.pylintrc

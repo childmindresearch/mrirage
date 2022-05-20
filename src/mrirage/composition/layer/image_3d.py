@@ -14,7 +14,7 @@ from ...slicer.types import t_spoint, t_spoints
 
 
 class LayerVoxel(Layer):
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
             self,
             data: Union[Datacube, Any],
             alpha_map: Optional[Union[Datacube, Callable[[Datacube], Datacube], Any]] = None,
