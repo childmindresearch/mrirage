@@ -3,9 +3,9 @@ from typing import Optional, Union, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
+from mrirage.composition.layer.style_data import Style
 
 from .layer import Layer
-from mrirage.composition.layer.style_data import Style
 from ...common import rep_tuple
 from ...slicer.types import t_spoint, t_spoints
 
@@ -178,7 +178,7 @@ class LayerLR(Layer):
         if view_axis == 0:
             return False
 
-        xmin, xmax, ymin, ymax = _get_axlims(plt_ax)
+        xmin, xmax, ymin, _ = _get_axlims(plt_ax)
 
         self._draw_style.render_text(
             xmin + self.pad_x, ymin + self.pad_y,
@@ -222,7 +222,7 @@ class LayerCoordinate(Layer):
         if d_origin is None:
             return False
 
-        xmin, xmax, ymin, ymax = _get_axlims(plt_ax)
+        xmin, _, _, ymax = _get_axlims(plt_ax)
 
         lab = np.array(self.axis_labels)[view_axis]
         val = np.array(d_origin)[view_axis]

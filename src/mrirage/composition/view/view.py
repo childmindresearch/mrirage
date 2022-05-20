@@ -4,10 +4,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from ..layer.layer import Layer
-from ...slicer.types import t_spoint, t_spoints, t_spoint_like, t_spoints_like, as_slicer_points, as_slicer_point
+from ...slicer.types import t_spoint_like, t_spoints_like, as_slicer_points, as_slicer_point
 
 
-class View:
+class View:  # pylint: disable=too-few-public-methods
     def __init__(
             self,
             view_axis: int = 0,

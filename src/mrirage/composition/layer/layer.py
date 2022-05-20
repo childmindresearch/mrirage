@@ -1,11 +1,11 @@
 from abc import ABC
-from typing import Optional, Tuple, List
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
+from mrirage.slicer.types import t_spoint, t_spoints
 
 from .style_data import Style
-from mrirage.slicer.types import t_spoint, t_spoints
 
 
 class Layer(ABC):
@@ -63,7 +63,7 @@ class Layer(ABC):
     def __ge__(self, other):
         return self.get_z_index() >= other.get_z_index()
 
-    def view_render(
+    def view_render(  # pylint: disable=no-self-use,unused-argument
             self,
             plt_ax: plt.Axes,
             view_axis: int,
@@ -73,4 +73,3 @@ class Layer(ABC):
             d_axis: Optional[int] = None
     ) -> bool:
         return False
-

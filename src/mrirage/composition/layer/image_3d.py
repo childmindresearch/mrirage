@@ -49,15 +49,14 @@ class LayerVoxel(Layer):
             bounds: np.ndarray,
             d_origin: Optional[t_spoint] = None,
             d_points: Optional[t_spoints] = None,
-            d_axis: Optional[int] = None,
-            d_target: Optional[t_spoint] = None
+            d_axis: Optional[int] = None
     ) -> bool:
         if d_origin is None:
             return False
 
         axis_offset = d_origin[view_axis]
 
-        raster, axis_lims, labs = slicer.slice_image(
+        raster, axis_lims, _ = slicer.slice_image(
             data=self.data,
             axis=view_axis,
             axis_offset=axis_offset,

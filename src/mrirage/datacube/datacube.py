@@ -36,37 +36,37 @@ class Datacube:
         return self
 
     def __lt__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__lt__(other)).astype(self.image.dtype),
                         self.affine, self.affine_inv)
 
     def __le__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__le__(other)).astype(self.image.dtype),
                         self.affine, self.affine_inv)
 
     def __gt__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__gt__(other)).astype(self.image.dtype),
                         self.affine, self.affine_inv)
 
     def __ge__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__ge__(other)).astype(self.image.dtype),
                         self.affine, self.affine_inv)
 
     def __eq__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__eq__(other)).astype(self.image.dtype),
                         self.affine, self.affine_inv)
 
     def __ne__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__ne__(other)).astype(self.image.dtype),
                         self.affine, self.affine_inv)
@@ -76,44 +76,43 @@ class Datacube:
                         self.affine, self.affine_inv)
 
     def __add__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__add__(other)),
                         self.affine, self.affine_inv)
 
     def __sub__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__sub__(other)),
                         self.affine, self.affine_inv)
 
     def __mul__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__mul__(other)),
                         self.affine, self.affine_inv)
 
     def __pow__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__pow__(other)),
                         self.affine, self.affine_inv)
 
     def __truediv__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__truediv__(other)),
                         self.affine, self.affine_inv)
 
     def __floordiv__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__floordiv__(other)),
                         self.affine, self.affine_inv)
 
     def __mod__(self, other):
-        if not (isinstance(other, float) or isinstance(other, int)):
+        if not isinstance(other, (float, int)):
             raise TypeError()
         return Datacube((self.image.__mod__(other)),
                         self.affine, self.affine_inv)
-

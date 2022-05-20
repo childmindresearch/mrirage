@@ -7,7 +7,7 @@ _t_color = Union[str, Tuple[float, float, float]]
 
 
 @dataclasses.dataclass
-class Style:
+class Style:  # pylint: disable=too-many-instance-attributes
     color: _t_color = None
     alpha: float = None
 
@@ -54,7 +54,7 @@ class Style:
             **kwargs
         )
 
-    def render_set_ticklabels(self, *args: Any, plt_ax: plt.Axes, **kwargs: Any):
+    def render_set_ticklabels(self, plt_ax: plt.Axes):
         for lab in plt_ax.get_xticklabels():
             lab.set_fontproperties({'family': self.font_family})
         for lab in plt_ax.get_yticklabels():
