@@ -33,7 +33,7 @@ ignore-patterns=^\.#
 
 # Python code to execute, usually for sys.path manipulation such as
 # pygtk.require().
-#init-hook=
+init-hook="from pylint.config import find_pylintrc; import os, sys; sys.path.append(os.path.join(os.path.dirname(find_pylintrc()), 'src')); sys.path.append(os.path.join(os.path.dirname(find_pylintrc()), 'tests')); "
 
 # Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
 # number of processors available to use.
@@ -223,7 +223,7 @@ good-names=i,
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
-good-names-rgxs=
+good-names-rgxs=^[_a-z][_a-z0-9]?$|^_?t_[_a-z0-9]+$
 
 # Include a hint for the correct naming format with invalid-name.
 include-naming-hint=no
@@ -320,9 +320,9 @@ logging-modules=logging
 [MISCELLANEOUS]
 
 # List of note tags to take in consideration, separated by a comma.
-notes=FIXME,
-      XXX,
-      TODO
+notes=#FIXME,
+      #XXX,
+      #TODO
 
 # Regular expression of note tags to take in consideration.
 #notes-rgx=
