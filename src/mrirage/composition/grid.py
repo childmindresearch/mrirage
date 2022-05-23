@@ -1,14 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Any, Optional, Union
+from typing import List, Tuple, Optional, Union
 
 from matplotlib import pyplot as plt
 
 from .composition import Composition
 from .layer.layer import Layer
 from .view.view import View
-from ..composition.layer.style_data import Style
-from ..common import rep_tuple
 from ..common import mpl_dom as mdom
+from ..composition.layer.style_data import Style
 
 
 class CompositionDom(Composition, ABC):
@@ -26,8 +25,9 @@ class CompositionDom(Composition, ABC):
         self._figure: Optional[plt.Figure] = None
 
     @abstractmethod
-    def _render_document(self, views: List[View], legend_entries: List[Layer]) -> Tuple[
-        mdom.MplDocument, List[mdom.MplElement], List[mdom.MplElement]]:
+    def _render_document(self, views: List[View], legend_entries: List[Layer]) -> Tuple[mdom.MplDocument,
+                                                                                        List[mdom.MplElement],
+                                                                                        List[mdom.MplElement]]:
         pass
 
     def _render_figure(self) -> bool:
@@ -38,15 +38,15 @@ class CompositionDom(Composition, ABC):
         if not doc.align():
             return False
 
-        self.figure = doc.make_figure()
+        self._figure = doc.make_figure()
 
-        # mdom.mpl._debug_document(doc, self.figure, False)
+        # mdom.mpl._debug_document(doc, self._figure, False)
 
-        view_axes = list(zip(self.views, doc.make_axes(self.figure, view_elements)))
-        legend_axes = list(zip(legend_entries, doc.make_axes(self.figure, legend_elements)))
+        view_axes = list(zip(self.views, doc.make_axes(self._figure, view_elements)))
+        legend_axes = list(zip(legend_entries, doc.make_axes(self._figure, legend_elements)))
 
         if self.color_bg is not None:
-            self.figure.set_facecolor(self.color_bg)
+            self._figure.set_facecolor(self.color_bg)
 
         for view, ax in view_axes:
             ax.axis('off')
@@ -57,7 +57,7 @@ class CompositionDom(Composition, ABC):
         return True
 
     def get_figure(self):
-        return self.figure
+        return self._figure
 
 
 class CompositionGrid(CompositionDom):
@@ -171,5 +171,5 @@ class CompositionGrid(CompositionDom):
 
         if len(legend_entries) == 0:
             return self._make_doc_no_legend()
-        else:
-            return self._make_doc_legend(legend_entries)
+
+        return self._make_doc_legend(legend_entries)

@@ -1,7 +1,7 @@
-from typing import Tuple, Union, Optional, List
+from typing import Tuple, Union, Optional
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 from ..datacube import Datacube
 
@@ -12,9 +12,6 @@ RAS_SPACE_DIRECTIONS = np.array([
 ])
 RAS_SPACE_LABELS = np.array(['x Left-Right', 'y Posterior-Anterior', 'z Inferior-Superior'])
 RAS_SPACE_LABELS_SHORT = np.array(['x (L-R)', 'y (P-A)', 'z (I-S)'])
-
-
-
 
 
 def cuboid(shape, dtype=np.float64):
@@ -133,7 +130,7 @@ def eye_1d(n, i, v: Union[int, float, complex, np.ndarray] = 1, f: Union[int, fl
     return a
 
 
-def slice_image(
+def slice_image(  # pylint: disable=too-many-locals
         data: Datacube,
         axis: int,
         axis_offset: float,

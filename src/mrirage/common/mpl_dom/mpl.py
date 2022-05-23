@@ -28,22 +28,22 @@ class Box:
         return str(self.as_tuple())
 
 
-class MplElement(object):
+class MplElement:
     def __init__(self):
         self.pos = Box()
 
     def pretty_str(self, indent='', indent_add='  ') -> str:
         if len(self.get_children()) == 0:
             return f'{indent}{self.get_descriptor()}'
-        else:
-            indent_next = indent + indent_add
-            cs = f',\n'.join([c.pretty_str(indent_next, indent_add) for c in self.get_children()])
-            return f'{indent}{self.get_descriptor()}[\n{cs}\n{indent}]'
+
+        indent_next = indent + indent_add
+        cs = ',\n'.join([c.pretty_str(indent_next, indent_add) for c in self.get_children()])
+        return f'{indent}{self.get_descriptor()}[\n{cs}\n{indent}]'
 
     def pretty_print(self, indent='', indent_add='  '):
         print(self.pretty_str(indent=indent, indent_add=indent_add))
 
-    def get_children(self) -> List['MplElement']:
+    def get_children(self) -> List['MplElement']:  # pylint: disable=no-self-use
         return []
 
     def get_descriptor(self):
@@ -151,7 +151,7 @@ class MplDivider(MplElement):
 
 class MplMargin(MplElement):
     def __init__(self, child: MplElement = None, left: float = 0, right: float = 0, top: float = 0,
-                 bottom: float = 0, fixed = False):
+                 bottom: float = 0, fixed=False):
         super().__init__()
         self.left = left
         self.right = right
@@ -164,7 +164,8 @@ class MplMargin(MplElement):
         return [self.child]
 
     def get_descriptor(self):
-        return f'Margin{self.pos}(fixed={self.fixed}, left={self.left}, right={self.right}, top={self.top}, bottom={self.bottom})'
+        return f'Margin{self.pos}(fixed={self.fixed}, left={self.left}, ' \
+               f'right={self.right}, top={self.top}, bottom={self.bottom})'
 
     def align_children(self, fix_w: float, fix_h: float):
         if self.fixed:
@@ -223,11 +224,11 @@ def _debug_axes(axes: List[plt.Axes]):
     return axes
 
 
-def _debug_document(doc: MplDocument, fig: plt.Figure=None, align=True):
+def _debug_document(doc: MplDocument, fig: plt.Figure = None, align=True):
     if align:
         doc.align()
     fig = fig if fig is not None else doc.make_figure()
-    _debug_axes(doc.make_axes(fig, [e for e in doc.iter_recursive()]))
+    _debug_axes(doc.make_axes(fig, list(doc.iter_recursive())))
     fig.show()
 
 
@@ -291,7 +292,6 @@ def main():
         a.axis('off')
         a.imshow([[1]], aspect='auto')
         a.text(0, 0, f'#{i}', color='w')
-        pass
 
     fig.suptitle('Hello')
     fig.show()

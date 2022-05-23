@@ -2,7 +2,7 @@ from typing import Optional, List, Union, Tuple
 
 import numpy as np
 
-from .. import t_spoint_like
+from ..slicer.types import t_spoint_like
 from ..composition import Composition, CompositionGrid, Layer, View, Style
 
 

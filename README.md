@@ -7,6 +7,7 @@ with the goal of creating and automating publication ready figures from 3D voxel
 
 ## Features
 
+- Highly customizable
 - Declarative API
 - Lightweight (only depends on common scientific Python packages)
 - Custom voxel image slicing engine
