@@ -3,7 +3,7 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
-from mrirage.slicer.types import t_spoint, t_spoints
+from mrirage.slicer.spoint import t_spoint, t_spoints
 
 from .style_data import Style
 

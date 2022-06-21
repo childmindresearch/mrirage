@@ -7,7 +7,7 @@ from mrirage.composition.layer.style_data import Style
 
 from .layer import Layer
 from ...common import rep_tuple
-from ...slicer.types import t_spoint, t_spoints
+from ...slicer.spoint import t_spoint, t_spoints
 
 
 def _get_axlims(plt_ax: plt.Axes):

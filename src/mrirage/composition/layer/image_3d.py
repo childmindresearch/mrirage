@@ -9,8 +9,7 @@ from mrirage.datacube import Datacube
 from mrirage.loader.nifti import get_nifti_cube
 
 from .layer import Layer, Style
-from ...slicer import slicer
-from ...slicer.types import t_spoint, t_spoints
+from ... import slicer
 
 
 class LayerVoxel(Layer):
@@ -47,8 +46,8 @@ class LayerVoxel(Layer):
             plt_ax: plt.Axes,
             view_axis: int,
             bounds: np.ndarray,
-            d_origin: Optional[t_spoint] = None,
-            d_points: Optional[t_spoints] = None,
+            d_origin: Optional[slicer.t_spoint] = None,
+            d_points: Optional[slicer.t_spoints] = None,
             d_axis: Optional[int] = None
     ) -> bool:
         if d_origin is None:

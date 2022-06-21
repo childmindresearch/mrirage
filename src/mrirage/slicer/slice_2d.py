@@ -1,21 +1,20 @@
-from typing import Tuple, Union, Optional
+from typing import Tuple, Union, Optional, Iterable
 
-import matplotlib.pyplot as plt
 import numpy as np
 
+from .common import RAS_SPACE_LABELS
+from .utils import eye_1d
 from ..datacube import Datacube
 
-RAS_SPACE_DIRECTIONS = np.array([
-    ['Left', 'Right'],
-    ['Posterior', 'Anterior'],
-    ['Inferior', 'Superior'],
-])
-RAS_SPACE_LABELS = np.array(['x Left-Right', 'y Posterior-Anterior', 'z Inferior-Superior'])
-RAS_SPACE_LABELS_SHORT = np.array(['x (L-R)', 'y (P-A)', 'z (I-S)'])
 
-
-def cuboid(shape, dtype=np.float64):
-    x, y, z = shape
+def cuboid(shape: Iterable, dtype=np.float64) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Get vertices and edges of a cuboid defined by shape
+    :param shape: Cuboid dimensions (x, y, z)
+    :param dtype: Output dtype
+    :return: (vertices, edge indices)
+    """
+    x, y, z = (i-1 for i in shape)
     return np.array([
         [0, 0, 0, 1],  # 0
         [x, 0, 0, 1],  # 1
@@ -41,22 +40,12 @@ def cuboid(shape, dtype=np.float64):
     ], dtype=int)
 
 
-def plot_poly(vertices, edges=None, inters=None):
-    labs = RAS_SPACE_LABELS_SHORT
-    ax = plt.axes(projection='3d', xlabel=labs[0], ylabel=labs[1], zlabel=labs[2])
-    ax.scatter3D(vertices[0], vertices[1], vertices[2], c=np.arange(vertices.shape[1]), cmap='Set1')
-
-    if edges is not None:
-        for e in edges:
-            ax.plot3D(vertices[0, e], vertices[1, e], vertices[2, e])
-
-    if inters is not None:
-        ax.scatter3D(inters[0], inters[1], inters[2], c="red")
-
-    return ax
-
-
-def intersect_line_plane(line_origin, line_dir, plane_origin, plane_normal, epsilon=1e-6):
+def intersect_line_plane(
+        line_origin: np.ndarray,
+        line_dir: np.ndarray,
+        plane_origin: np.ndarray,
+        plane_normal: np.ndarray,
+        epsilon=1e-6) -> Optional[np.ndarray]:
     nu = plane_normal.dot(line_dir)
 
     if abs(nu) < epsilon:
@@ -69,7 +58,12 @@ def intersect_line_plane(line_origin, line_dir, plane_origin, plane_normal, epsi
     return psi
 
 
-def intersect_points_plane(point1, point2, plane_origin, plane_normal, epsilon=1e-6):
+def intersect_points_plane(
+        point1: np.ndarray,
+        point2: np.ndarray,
+        plane_origin: np.ndarray,
+        plane_normal: np.ndarray,
+        epsilon=1e-6) -> Optional[np.ndarray]:
     direction = point2 - point1
     orig = point1
 
@@ -99,7 +93,7 @@ def intersect_poly(
         edges: np.ndarray,
         plane_origin: np.ndarray,
         plane_normal: np.ndarray
-):
+) -> Optional[np.ndarray]:
     inters = []
     for e in edges:
         line = vertices[0:3, e]
@@ -119,32 +113,21 @@ def intersect_poly(
     return np.vstack([re, np.ones(re.shape[1])])
 
 
-def norm_vec(v):
-    return v / np.sqrt(np.sum(v ** 2))
-
-
-def eye_1d(n, i, v: Union[int, float, complex, np.ndarray] = 1, f: Union[int, float, complex, np.ndarray] = 0,
-           dtype=None):
-    a = np.full((n,), fill_value=f, dtype=dtype)
-    a[i] = v
-    return a
-
-
 def slice_image(  # pylint: disable=too-many-locals
         data: Datacube,
         axis: int,
         axis_offset: float,
         bounds: Optional[np.ndarray] = None,
         sampling_dims: Optional[Tuple] = None) \
-        -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        -> Optional[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
 
     corners, edges = cuboid(data.image.shape)
     corners_trans = data.transform(corners)
 
     inters = intersect_poly(
         corners_trans, edges,
-        plane_origin=np.array(eye_1d(3, axis, v=axis_offset), dtype=np.float64),
-        plane_normal=np.array(eye_1d(3, axis), dtype=np.float64))
+        plane_origin=eye_1d(3, axis, v=axis_offset, dtype=np.float64),
+        plane_normal=eye_1d(3, axis, dtype=np.float64))
 
     # data cube does not intersect plane
     if inters is None or inters.shape[1] < 3:
@@ -188,6 +171,7 @@ def slice_image(  # pylint: disable=too-many-locals
         w2 = np.linalg.norm(rect_trans[:, 3] - rect_trans[:, 2])
         h1 = np.linalg.norm(rect_trans[:, 2] - rect_trans[:, 1])
         h2 = np.linalg.norm(rect_trans[:, 0] - rect_trans[:, 3])
+
         w = max(w1, w2)
         h = max(h1, h2)
         wn = int(np.ceil(w)) + 1
@@ -222,50 +206,3 @@ def slice_image(  # pylint: disable=too-many-locals
     axis_lims = rect[var_dims][:, (True, False, True, False)]
 
     return rastered, axis_lims, labs
-
-
-def bounds_manual(p1, p2):
-    return np.vstack((np.vstack((p1, p2)).T, (0, 0)))
-
-
-def bounds_where(bool_image, affine, margin=0.):
-    wpos = np.where(bool_image)
-    wpos = np.vstack(
-        wpos + (np.ones(wpos[0].shape[0]),)
-    )
-
-    wpos_trans = np.dot(affine, wpos)
-
-    return np.vstack([
-        np.min(wpos_trans, axis=1) - margin,
-        np.max(wpos_trans, axis=1) + margin
-    ]).T
-
-
-def bounds_cube(
-        size: Union[float, Tuple[float, float, float]],
-        offset: Union[float, Tuple[float, float, float]] = 0.) -> np.ndarray:
-    if isinstance(size, tuple):
-        size_x, size_y, size_z = size
-    else:
-        size_x = size_y = size_z = size
-    if isinstance(offset, tuple):
-        offset_x, offset_y, offset_z = offset
-    else:
-        offset_x = offset_y = offset_z = offset
-
-    return np.array([
-        [offset_x-size_x, offset_x+size_x],
-        [offset_y-size_y, offset_y+size_y],
-        [offset_z-size_z, offset_z+size_z],
-        [1., 1.]
-    ])
-
-
-def bounds_mni_cube():
-    return bounds_cube(100, (0, -17, 10))
-
-
-def value_at(data: Datacube, position):
-    p = data.transform_inv(np.array([position + (1,)]).T).flatten().astype(int)
-    return data.image[p[0], p[1], p[2]]
