@@ -9,6 +9,10 @@ from .style_data import Style
 
 
 class Layer(ABC):
+    """
+    Layer base class. Layer components should (in most cases) overload
+    ``Layer.view_render()`` and ``Layer.render_legend()``.
+    """
 
     def __init__(self, style: Style = None, legend: bool = False, z_index: int = 0):
         self.style = style

@@ -8,6 +8,11 @@ from ...slicer.types import t_spoint_like, t_spoints_like, as_slicer_points, as_
 
 
 class View:  # pylint: disable=too-few-public-methods
+    """
+    Views represent the individual subplots in the composition.
+    They contain individual projection information which is
+    passed to each layer while rendering.
+    """
     def __init__(
             self,
             view_axis: int = 0,
