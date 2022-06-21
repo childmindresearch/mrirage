@@ -1,7 +1,5 @@
-import numpy as np
-
+from .spoint import t_spoint_like, as_slicer_point
 from ..datacube import Datacube
-from .spoint import t_spoint, t_spoint_like, as_slicer_point
 
 
 def value_at(data: Datacube, position: t_spoint_like):

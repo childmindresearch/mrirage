@@ -1,4 +1,4 @@
-from typing import Tuple, Union, Optional, Iterable
+from typing import Tuple, Optional, Iterable
 
 import numpy as np
 

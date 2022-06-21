@@ -31,10 +31,10 @@ def test_slicer_2d():
         ], dtype=np.float64)
     )
 
-    rastered_0_0, axis_lims_0_0, _ = slicer.slice_image(cube, axis=0, axis_offset=0)
+    rastered_0_0, _, _ = slicer.slice_image(cube, axis=0, axis_offset=0)
     rastered_0_1, axis_lims_0_1, _ = slicer.slice_image(cube, axis=0, axis_offset=1)
-    rastered_1_0, axis_lims_1_0, _ = slicer.slice_image(cube, axis=1, axis_offset=0)
-    rastered_2_0, axis_lims_2_0, _ = slicer.slice_image(cube, axis=2, axis_offset=0)
+    rastered_1_0, _, _ = slicer.slice_image(cube, axis=1, axis_offset=0)
+    rastered_2_0, _, _ = slicer.slice_image(cube, axis=2, axis_offset=0)
 
     assert np.allclose(rastered_0_0, np.array(
         [[0, 3, 6],
