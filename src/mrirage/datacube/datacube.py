@@ -12,9 +12,15 @@ class Datacube:
         self.affine_inv = np.linalg.inv(self.affine) if affine_inv is None else affine_inv
 
     def transform(self, p: Union[np.ndarray, Iterable]):
+        """
+        Data space -> reference space
+        """
         return np.dot(self.affine, p)
 
     def transform_inv(self, p: Union[np.ndarray, Iterable]):
+        """
+        Reference space -> data space
+        """
         return np.dot(self.affine_inv, p)
 
     def apply_gaussian(self, sigma: Union[int, float, complex, Iterable], truncate: float = 4.0):

@@ -1,3 +1,4 @@
+import warnings
 from dataclasses import dataclass
 from typing import Any, Optional, Union, Callable
 
@@ -76,13 +77,13 @@ class LayerVoxel(Layer):
                 raster_alpha *= self.alpha
 
         plt_ax.imshow(
-            raster,
+            raster.T,
             norm=None,
             vmin=self.color_scale.vmin,
             vmax=self.color_scale.vmax,
             cmap=self.color_scale.cmap,
             origin='lower',
-            alpha=self.alpha if raster_alpha is None else raster_alpha,
+            alpha=self.alpha if raster_alpha is None else raster_alpha.T,
             interpolation=self.interp_screen,
             extent=axis_lims.flatten()
         )
@@ -142,3 +143,52 @@ class ColorScaleSolid(ColorScale):
         ax.axis('off')
         if label is not None:
             style.render_set_title(label, loc='left', plt_ax=ax)
+
+
+class LayerVoxelGlass(LayerVoxel):
+    def view_render(
+            self,
+            plt_ax: plt.Axes,
+            view_axis: int,
+            bounds: np.ndarray,
+            d_origin: Optional[slicer.t_spoint] = None,
+            d_points: Optional[slicer.t_spoints] = None,
+            d_axis: Optional[int] = None
+    ) -> bool:
+
+        raster_3d, axis_lims_3d, _ = slicer.slice_3d(
+            data=self.data,
+            bounds=bounds
+        )
+        axis_lims_2d = axis_lims_3d[slicer.eye_1d(n=3, i=view_axis, v=False, f=True)]
+
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore', r'All-NaN slice encountered')
+            raster_2d = np.nansum(raster_3d, axis=view_axis)
+
+        raster_alpha_2d = None
+        if self.alpha_map is not None:
+            raster_alpha_3d, _, _ = slicer.slice_3d(
+                data=self.alpha_map,
+                bounds=bounds,
+                sampling_dims=raster_3d.shape
+            )
+
+            raster_alpha_2d = np.nanmax(raster_alpha_3d, axis=view_axis)
+
+            if self.alpha < 1:
+                raster_alpha_2d *= self.alpha
+
+        plt_ax.imshow(
+            raster_2d.T,
+            norm=None,
+            vmin=self.color_scale.vmin,
+            vmax=self.color_scale.vmax,
+            cmap=self.color_scale.cmap,
+            origin='lower',
+            alpha=self.alpha if raster_alpha_2d is None else raster_alpha_2d.T,
+            interpolation=self.interp_screen,
+            extent=axis_lims_2d.flatten()
+        )
+        return True
+

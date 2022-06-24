@@ -1,43 +1,10 @@
-from typing import Tuple, Optional, Iterable
+from typing import Tuple, Optional
 
 import numpy as np
 
 from .common import RAS_SPACE_LABELS
-from .utils import eye_1d
+from .utils import eye_1d, cuboid, cuboid_edges
 from ..datacube import Datacube
-
-
-def cuboid(shape: Iterable, dtype=np.float64) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Get vertices and edges of a cuboid defined by shape
-    :param shape: Cuboid dimensions (x, y, z)
-    :param dtype: Output dtype
-    :return: (vertices, edge indices)
-    """
-    x, y, z = (i-1 for i in shape)
-    return np.array([
-        [0, 0, 0, 1],  # 0
-        [x, 0, 0, 1],  # 1
-        [0, y, 0, 1],  # 2
-        [0, 0, z, 1],  # 3
-        [x, y, 0, 1],  # 4
-        [0, y, z, 1],  # 5
-        [x, 0, z, 1],  # 6
-        [x, y, z, 1]  # 7
-    ], dtype=dtype).T, np.array([
-        [0, 1],
-        [0, 2],
-        [0, 3],
-        [1, 4],
-        [1, 6],
-        [2, 4],
-        [2, 5],
-        [3, 5],
-        [3, 6],
-        [4, 7],
-        [5, 7],
-        [6, 7],
-    ], dtype=int)
 
 
 def intersect_line_plane(
@@ -121,7 +88,8 @@ def slice_image(  # pylint: disable=too-many-locals
         sampling_dims: Optional[Tuple] = None) \
         -> Optional[Tuple[np.ndarray, np.ndarray, np.ndarray]]:
 
-    corners, edges = cuboid(data.image.shape)
+    corners = cuboid(data.image.shape)
+    edges = cuboid_edges()
     corners_trans = data.transform(corners)
 
     inters = intersect_poly(
@@ -195,7 +163,7 @@ def slice_image(  # pylint: disable=too-many-locals
         sample_grid_trans[i] = sample_grid_trans[i].clip(0, data.image.shape[i] - 1)
 
     # raster 2D image
-    x = sample_grid_trans[0:3].reshape((3, hn, wn), order='F')
+    x = sample_grid_trans[0:3].reshape((3, wn, hn))
     rastered = data.image[x[0], x[1], x[2]]
 
     # select axis labels
