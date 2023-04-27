@@ -6,12 +6,14 @@ from matplotlib import pyplot as plt
 from ..layer.layer import Layer
 import fineslice as fine
 
+
 class View:  # pylint: disable=too-few-public-methods
     """
     Views represent the individual subplots in the composition.
     They contain individual projection information which is
     passed to each layer while rendering.
     """
+
     def __init__(
             self,
             view_axis: int = 0,

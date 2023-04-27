@@ -25,9 +25,11 @@ class CompositionDom(Composition, ABC):
         self._figure: Optional[plt.Figure] = None
 
     @abstractmethod
-    def _render_document(self, views: List[View], legend_entries: List[Layer]) -> Tuple[mdom.MplDocument,
-    List[mdom.MplElement],
-    List[mdom.MplElement]]:
+    def _render_document(
+            self,
+            views: List[View],
+            legend_entries: List[Layer]
+    ) -> Tuple[mdom.MplDocument, List[mdom.MplElement], List[mdom.MplElement]]:
         pass
 
     def _render_figure(self) -> bool:
