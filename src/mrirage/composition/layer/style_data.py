@@ -64,7 +64,7 @@ class Style:  # pylint: disable=too-many-instance-attributes
         fields = dataclasses.fields(Style)
         re = Style()
         for f in fields:
-            s_val = self.__getattribute__(f.name)
-            o_val = other.__getattribute__(f.name)
-            re.__setattr__(f.name, o_val if s_val is None else s_val)
+            s_val = getattr(self, f.name)
+            o_val = getattr(other, f.name)
+            setattr(re, f.name, o_val if s_val is None else s_val)
         return re

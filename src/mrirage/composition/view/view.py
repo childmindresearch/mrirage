@@ -1,10 +1,10 @@
 from typing import List, Optional
 
+import fineslice as fine
 import numpy as np
 from matplotlib import pyplot as plt
 
 from ..layer.layer import Layer
-import fineslice as fine
 
 
 class View:  # pylint: disable=too-few-public-methods

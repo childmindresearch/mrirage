@@ -1,11 +1,11 @@
 from abc import ABC
 from typing import Optional
 
+import fineslice as fine
 import matplotlib.pyplot as plt
 import numpy as np
 
 from .style_data import Style
-import fineslice as fine
 
 
 class Layer(ABC):
@@ -67,7 +67,7 @@ class Layer(ABC):
     def __ge__(self, other):
         return self.get_z_index() >= other.get_z_index()
 
-    def view_render(  # pylint: disable=no-self-use,unused-argument
+    def view_render(  # pylint: disable=unused-argument
             self,
             plt_ax: plt.Axes,
             view_axis: int,

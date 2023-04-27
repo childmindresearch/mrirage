@@ -34,7 +34,7 @@ class Datacube:
     def normalize(self, min_value=0.0, max_value=1.0):
         amin = np.min(self.image)
         amax = np.max(self.image)
-        arange = (amax - amin)
+        arange = amax - amin
         if arange == 0:
             warnings.warn('Could not normalize datacube (zero range).')
             return self

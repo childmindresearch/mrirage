@@ -43,7 +43,7 @@ class MplElement:
     def pretty_print(self, indent='', indent_add='  '):
         print(self.pretty_str(indent=indent, indent_add=indent_add))
 
-    def get_children(self) -> List['MplElement']:  # pylint: disable=no-self-use
+    def get_children(self) -> List['MplElement']:
         return []
 
     def get_descriptor(self):
@@ -202,7 +202,7 @@ class MplGrid(MplElement):
         gh = self.pos.h / nrows
 
         for i, child in enumerate(self.get_children()):
-            xg = (i % ncols)
+            xg = i % ncols
             yg = nrows - 1 - (i // ncols)
 
             child.pos.x = self.pos.x + (xg * gw)
