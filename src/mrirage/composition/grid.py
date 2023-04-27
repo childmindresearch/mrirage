@@ -26,8 +26,8 @@ class CompositionDom(Composition, ABC):
 
     @abstractmethod
     def _render_document(self, views: List[View], legend_entries: List[Layer]) -> Tuple[mdom.MplDocument,
-                                                                                        List[mdom.MplElement],
-                                                                                        List[mdom.MplElement]]:
+    List[mdom.MplElement],
+    List[mdom.MplElement]]:
         pass
 
     def _render_figure(self) -> bool:
@@ -79,7 +79,6 @@ class CompositionGrid(CompositionDom):
         self.legend_scale = legend_scale
 
     def _make_doc_legend(self, legend_entries: List[Layer]):
-
         view_containers = [
             mdom.MplMargin(
                 left=0.1,
@@ -135,7 +134,6 @@ class CompositionGrid(CompositionDom):
         ), view_elements, legend_elements
 
     def _make_doc_no_legend(self):
-
         view_containers = [
             mdom.MplMargin(
                 left=0.1,
@@ -168,7 +166,6 @@ class CompositionGrid(CompositionDom):
             self,
             views: List[View],
             legend_entries: List[Layer]) -> Tuple[mdom.MplDocument, List[mdom.MplElement], List[mdom.MplElement]]:
-
         if len(legend_entries) == 0:
             return self._make_doc_no_legend()
 

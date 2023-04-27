@@ -4,8 +4,8 @@ from typing import List, Optional, Union, Tuple
 from matplotlib import pyplot as plt
 
 from .layer.layer import Layer
-from .view.view import View
 from .layer.style_data import Style
+from .view.view import View
 from ..common import rep_tuple
 
 

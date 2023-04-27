@@ -1,7 +1,7 @@
 import mrirage as mir
 
 PATH_MNI_T1 = 'data/mni_icbm152_t1_tal_nlin_asym_09b_hires.nii'
-PATH_MNI_MASK = 'data/icbm_avg_152_t1_tal_lin_mask.nii'
+PATH_MNI_MASK = 'data/mni_icbm152_t1_tal_nlin_asym_09a_mask.nii'
 PATH_STAT_MAP = 'data/Q1_NC_vs_MIG.nii.gz'
 
 comp = mir.quick_xyz(

@@ -2,15 +2,14 @@ import warnings
 from dataclasses import dataclass
 from typing import Any, Optional, Union, Callable
 
+import fineslice as fine
 import numpy as np
-from matplotlib import pyplot as plt
 from matplotlib import colors as pltcol
-
-from mrirage.datacube import Datacube
-from mrirage.loader.nifti import get_nifti_cube
+from matplotlib import pyplot as plt
 
 from .layer import Layer, Style
-from ... import slicer
+from ... import Datacube
+from ...loader.nifti import get_nifti_cube
 
 
 class LayerVoxel(Layer):
@@ -47,45 +46,51 @@ class LayerVoxel(Layer):
             plt_ax: plt.Axes,
             view_axis: int,
             bounds: np.ndarray,
-            d_origin: Optional[slicer.t_spoint] = None,
-            d_points: Optional[slicer.t_spoints] = None,
+            d_origin: Optional[fine.types.SamplerPoint] = None,
+            d_points: Optional[fine.types.SamplerPoints] = None,
             d_axis: Optional[int] = None
     ) -> bool:
         if d_origin is None:
             return False
 
-        axis_offset = d_origin[view_axis]
-
-        raster, axis_lims, _ = slicer.slice_image(
-            data=self.data,
-            axis=view_axis,
-            axis_offset=axis_offset,
-            bounds=bounds
+        sample = fine.sample_2d(
+            texture=self.data.image,
+            affine=self.data.affine,
+            out_position=d_origin,
+            out_axis=view_axis,
+            out_bounds=bounds
         )
 
-        raster_alpha = None
+        if sample is None:
+            pass  # todo
+
+        sample_alpha = None
         if self.alpha_map is not None:
-            raster_alpha, _, _ = slicer.slice_image(
-                data=self.alpha_map,
-                axis=view_axis,
-                axis_offset=axis_offset,
-                bounds=bounds,
-                sampling_dims=raster.shape
+            sample_alpha = fine.sample_2d(
+                texture=self.alpha_map.image,
+                affine=self.alpha_map.affine,
+                out_position=d_origin,
+                out_axis=view_axis,
+                out_bounds=bounds,
+                out_resolution=sample.texture.shape
             )
 
+            if sample_alpha is None:
+                pass  # todo
+
             if self.alpha < 1:
-                raster_alpha *= self.alpha
+                sample_alpha.texture *= self.alpha
 
         plt_ax.imshow(
-            raster.T,
+            sample.texture.T,
             norm=None,
             vmin=self.color_scale.vmin,
             vmax=self.color_scale.vmax,
             cmap=self.color_scale.cmap,
             origin='lower',
-            alpha=self.alpha if raster_alpha is None else raster_alpha.T,
+            alpha=self.alpha if sample_alpha is None else sample_alpha.texture.T,
             interpolation=self.interp_screen,
-            extent=axis_lims.flatten()
+            extent=sample.coordinates.flatten()
         )
         return True
 
@@ -151,30 +156,36 @@ class LayerVoxelGlass(LayerVoxel):
             plt_ax: plt.Axes,
             view_axis: int,
             bounds: np.ndarray,
-            d_origin: Optional[slicer.t_spoint] = None,
-            d_points: Optional[slicer.t_spoints] = None,
+            d_origin: Optional[fine.types.SamplerPoint] = None,
+            d_points: Optional[fine.types.SamplerPoints] = None,
             d_axis: Optional[int] = None
     ) -> bool:
 
-        raster_3d, axis_lims_3d, _ = slicer.slice_3d(
-            data=self.data,
-            bounds=bounds
+        sample = fine.sample_3d(
+            texture=self.data.image,
+            affine=self.data.affine,
+            out_bounds=bounds
         )
-        axis_lims_2d = axis_lims_3d[slicer.eye_1d(n=3, i=view_axis, v=False, f=True)]
+
+        if sample is None:
+            pass  # todo
 
         with warnings.catch_warnings():
             warnings.filterwarnings('ignore', r'All-NaN slice encountered')
-            raster_2d = np.nansum(raster_3d, axis=view_axis)
+            raster_2d = np.nansum(sample.texture, axis=view_axis)
 
         raster_alpha_2d = None
         if self.alpha_map is not None:
-            raster_alpha_3d, _, _ = slicer.slice_3d(
-                data=self.alpha_map,
-                bounds=bounds,
-                sampling_dims=raster_3d.shape
+            sample_alpha = fine.sample_3d(
+                texture=self.alpha_map.image,
+                affine=self.alpha_map.affine,
+                out_bounds=bounds
             )
 
-            raster_alpha_2d = np.nanmax(raster_alpha_3d, axis=view_axis)
+            if sample_alpha is None:
+                pass  # todo
+
+            raster_alpha_2d = np.nanmax(sample_alpha.texture, axis=view_axis)
 
             if self.alpha < 1:
                 raster_alpha_2d *= self.alpha
@@ -188,7 +199,6 @@ class LayerVoxelGlass(LayerVoxel):
             origin='lower',
             alpha=self.alpha if raster_alpha_2d is None else raster_alpha_2d.T,
             interpolation=self.interp_screen,
-            extent=axis_lims_2d.flatten()
+            extent=np.delete(sample.coordinates, view_axis, axis=0).flatten()
         )
         return True
-

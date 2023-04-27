@@ -1,13 +1,13 @@
 from abc import ABC
 from typing import Optional, Union, Tuple
 
+import fineslice as fine
 import matplotlib.pyplot as plt
 import numpy as np
-from mrirage.composition.layer.style_data import Style
 
+from mrirage.composition.layer.style_data import Style
 from .layer import Layer
 from ...common import rep_tuple
-from ...slicer.spoint import t_spoint, t_spoints
 
 
 def _get_axlims(plt_ax: plt.Axes):
@@ -67,8 +67,8 @@ class LayerCrossOrigin(LayerCrossBase):
             plt_ax: plt.Axes,
             view_axis: int,
             bounds: np.ndarray,
-            d_origin: Optional[t_spoint] = None,
-            d_points: Optional[t_spoints] = None,
+            d_origin: Optional[fine.types.SamplerPoint] = None,
+            d_points: Optional[fine.types.SamplerPoints] = None,
             d_axis: Optional[int] = None
     ) -> bool:
         if d_origin is not None:
@@ -82,8 +82,8 @@ class LayerCross(LayerCrossBase):
             plt_ax: plt.Axes,
             view_axis: int,
             bounds: np.ndarray,
-            d_origin: Optional[t_spoint] = None,
-            d_points: Optional[t_spoints] = None,
+            d_origin: Optional[fine.types.SamplerPoint] = None,
+            d_points: Optional[fine.types.SamplerPoints] = None,
             d_axis: Optional[int] = None
     ) -> bool:
         if d_points is not None:
@@ -112,8 +112,8 @@ class LayerLine(Layer):
             plt_ax: plt.Axes,
             view_axis: int,
             bounds: np.ndarray,
-            d_origin: Optional[t_spoint] = None,
-            d_points: Optional[t_spoints] = None,
+            d_origin: Optional[fine.types.SamplerPoint] = None,
+            d_points: Optional[fine.types.SamplerPoints] = None,
             d_axis: Optional[int] = None
     ) -> bool:
         if d_points is None and d_origin is not None:
@@ -171,8 +171,8 @@ class LayerLR(Layer):
             plt_ax: plt.Axes,
             view_axis: int,
             bounds: np.ndarray,
-            d_origin: Optional[t_spoint] = None,
-            d_points: Optional[t_spoints] = None,
+            d_origin: Optional[fine.types.SamplerPoint] = None,
+            d_points: Optional[fine.types.SamplerPoints] = None,
             d_axis: Optional[int] = None
     ) -> bool:
         if view_axis == 0:
@@ -215,8 +215,8 @@ class LayerCoordinate(Layer):
             plt_ax: plt.Axes,
             view_axis: int,
             bounds: np.ndarray,
-            d_origin: Optional[t_spoint] = None,
-            d_points: Optional[t_spoints] = None,
+            d_origin: Optional[fine.types.SamplerPoint] = None,
+            d_points: Optional[fine.types.SamplerPoints] = None,
             d_axis: Optional[int] = None
     ) -> bool:
         if d_origin is None:

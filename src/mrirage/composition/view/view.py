@@ -4,8 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from ..layer.layer import Layer
-from ...slicer.spoint import t_spoint_like, t_spoints_like, as_slicer_points, as_slicer_point
-
+import fineslice as fine
 
 class View:  # pylint: disable=too-few-public-methods
     """
@@ -17,14 +16,14 @@ class View:  # pylint: disable=too-few-public-methods
             self,
             view_axis: int = 0,
             bounds: Optional[np.ndarray] = None,
-            origin: Optional[t_spoint_like] = None,
-            points: Optional[t_spoints_like] = None,
+            origin: Optional[fine.types.SamplerPointLike] = None,
+            points: Optional[fine.types.SamplerPointsLike] = None,
             axis: Optional[int] = None
     ):
         self.view_axis = view_axis
         self.bounds = bounds
-        self.origin = None if origin is None else as_slicer_point(origin)
-        self.points = None if points is None else as_slicer_points(points)
+        self.origin = None if origin is None else fine.types.sampler_point_3d(origin)
+        self.points = None if points is None else fine.types.as_sampler_points(points)
         self.axis = axis
 
     def render(self, layers: List[Layer], plt_ax: plt.Axes) -> None:

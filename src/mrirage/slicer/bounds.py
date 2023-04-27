@@ -34,9 +34,9 @@ def bounds_cube(
         offset_x = offset_y = offset_z = offset
 
     return np.array([
-        [offset_x-size_x, offset_x+size_x],
-        [offset_y-size_y, offset_y+size_y],
-        [offset_z-size_z, offset_z+size_z],
+        [offset_x - size_x, offset_x + size_x],
+        [offset_y - size_y, offset_y + size_y],
+        [offset_z - size_z, offset_z + size_z],
         [1., 1.]
     ])
 

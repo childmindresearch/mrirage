@@ -1,19 +1,20 @@
 from typing import Optional, List, Union, Tuple
 
+import fineslice as fine
 import numpy as np
 
-from ..slicer.spoint import t_spoint_like
 from ..composition import Composition, CompositionGrid, Layer, View, Style
 
 
-def quick_add_xyz(composition: Composition, origin: Optional[t_spoint_like], bounds: Optional[np.ndarray] = None):
+def quick_add_xyz(composition: Composition, origin: Optional[fine.types.SamplerPointLike],
+                  bounds: Optional[np.ndarray] = None):
     for i in range(3):
         composition.views.append(View(view_axis=i, origin=origin if origin is not None else (0, 0, 0), bounds=bounds))
 
 
 def quick_xyz(
         layers: Optional[List[Layer]],
-        origin: Optional[t_spoint_like] = None,
+        origin: Optional[fine.types.SamplerPointLike] = None,
         bounds: Optional[np.ndarray] = None,
         figure_size: Union[float, Tuple[float, float]] = None,
         dpi=200,

@@ -3,9 +3,9 @@ from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
-from mrirage.slicer.spoint import t_spoint, t_spoints
 
 from .style_data import Style
+import fineslice as fine
 
 
 class Layer(ABC):
@@ -72,8 +72,8 @@ class Layer(ABC):
             plt_ax: plt.Axes,
             view_axis: int,
             bounds: np.ndarray,
-            d_origin: Optional[t_spoint] = None,
-            d_points: Optional[t_spoints] = None,
+            d_origin: Optional[fine.types.SamplerPoint] = None,
+            d_points: Optional[fine.types.SamplerPoints] = None,
             d_axis: Optional[int] = None
     ) -> bool:
         return False
