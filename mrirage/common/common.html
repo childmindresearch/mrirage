@@ -61,15 +61,18 @@
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">    Expand or constrain tuple to ``n`` elements by repeating its elements.</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    :param n: Output element count.</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    :param t: Input tuple (or scalar object).</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    :return: Expanded or constrained tuple.</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>        <span class="k">return</span> <span class="n">t</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    Args:</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">        n: Output element count.</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">        t: Input tuple (or scalar object).</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    Returns:</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">        Expanded or constrained tuple.</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="n">t</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -89,28 +92,31 @@
 </span><span id="rep_tuple-6"><a href="#rep_tuple-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="rep_tuple-7"><a href="#rep_tuple-7"><span class="linenos"> 7</span></a><span class="sd">    Expand or constrain tuple to ``n`` elements by repeating its elements.</span>
 </span><span id="rep_tuple-8"><a href="#rep_tuple-8"><span class="linenos"> 8</span></a>
-</span><span id="rep_tuple-9"><a href="#rep_tuple-9"><span class="linenos"> 9</span></a><span class="sd">    :param n: Output element count.</span>
-</span><span id="rep_tuple-10"><a href="#rep_tuple-10"><span class="linenos">10</span></a><span class="sd">    :param t: Input tuple (or scalar object).</span>
-</span><span id="rep_tuple-11"><a href="#rep_tuple-11"><span class="linenos">11</span></a><span class="sd">    :return: Expanded or constrained tuple.</span>
-</span><span id="rep_tuple-12"><a href="#rep_tuple-12"><span class="linenos">12</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="rep_tuple-13"><a href="#rep_tuple-13"><span class="linenos">13</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-</span><span id="rep_tuple-14"><a href="#rep_tuple-14"><span class="linenos">14</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
-</span><span id="rep_tuple-15"><a href="#rep_tuple-15"><span class="linenos">15</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
-</span><span id="rep_tuple-16"><a href="#rep_tuple-16"><span class="linenos">16</span></a>        <span class="k">return</span> <span class="n">t</span>
-</span><span id="rep_tuple-17"><a href="#rep_tuple-17"><span class="linenos">17</span></a>    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span><span id="rep_tuple-9"><a href="#rep_tuple-9"><span class="linenos"> 9</span></a><span class="sd">    Args:</span>
+</span><span id="rep_tuple-10"><a href="#rep_tuple-10"><span class="linenos">10</span></a><span class="sd">        n: Output element count.</span>
+</span><span id="rep_tuple-11"><a href="#rep_tuple-11"><span class="linenos">11</span></a><span class="sd">        t: Input tuple (or scalar object).</span>
+</span><span id="rep_tuple-12"><a href="#rep_tuple-12"><span class="linenos">12</span></a>
+</span><span id="rep_tuple-13"><a href="#rep_tuple-13"><span class="linenos">13</span></a><span class="sd">    Returns:</span>
+</span><span id="rep_tuple-14"><a href="#rep_tuple-14"><span class="linenos">14</span></a><span class="sd">        Expanded or constrained tuple.</span>
+</span><span id="rep_tuple-15"><a href="#rep_tuple-15"><span class="linenos">15</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="rep_tuple-16"><a href="#rep_tuple-16"><span class="linenos">16</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+</span><span id="rep_tuple-17"><a href="#rep_tuple-17"><span class="linenos">17</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span><span id="rep_tuple-18"><a href="#rep_tuple-18"><span class="linenos">18</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
+</span><span id="rep_tuple-19"><a href="#rep_tuple-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="n">t</span>
+</span><span id="rep_tuple-20"><a href="#rep_tuple-20"><span class="linenos">20</span></a>    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Expand or constrain tuple to <code>n</code> elements by repeating its elements.</p>
 
-<h6 id="parameters">Parameters</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>n</strong>:  Output element count.</li>
-<li><strong>t</strong>:  Input tuple (or scalar object).</li>
+<li><strong>n:</strong>  Output element count.</li>
+<li><strong>t:</strong>  Input tuple (or scalar object).</li>
 </ul>
 
-<h6 id="returns">Returns</h6>
+<h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p>Expanded or constrained tuple.</p>
