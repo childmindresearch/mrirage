@@ -21,6 +21,15 @@
             <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                    pattern=".+" required>
 
+            <h2>Contents</h2>
+            <ul>
+  <li><a href="#mrirage"><code>mrirage</code></a>
+  <ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#tutorials">Tutorials</a></li>
+  </ul></li>
+</ul>
+
 
             <h2>Submodules</h2>
             <ul>
@@ -46,16 +55,50 @@
                     <h1 class="modulename">
 mrirage    </h1>
 
-                
+                        <div class="docstring"><blockquote>
+  <p>This is completely experimental work in progress / MVP at the moment. There will be bugs and no APIs are stable.</p>
+</blockquote>
+
+<h1 id="mrirage"><code><a href="">mrirage</a></code></h1>
+
+<p><a href="https://github.com/cmi-dair/mrirage/actions/workflows/test.yml?query=branch%3Amaster"><img src="https://github.com/cmi-dair/mrirage/actions/workflows/test.yml/badge.svg?branch=master" alt="Build" /></a>
+<a href="https://codecov.io/gh/cmi-dair/mrirage"><img src="https://codecov.io/gh/cmi-dair/mrirage/branch/master/graph/badge.svg?token=22HWWFWPW5" alt="codecov" /></a>
+<a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black" /></a>
+<img src="https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg" alt="stability-wip" />
+<a href="https://github.com/cmi-dair/mrirage/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
+<a href="https://cmi-dair.github.io/mrirage"><img src="https://img.shields.io/badge/api-docs-blue" alt="pages" /></a></p>
+
+<p><code><a href="">mrirage</a></code> (pronounced _mirage_) is a scientific visualization library for Python 
+with the goal of creating and automating publication ready figures from 3D voxel MRI images.</p>
+
+<h2 id="features">Features</h2>
+
+<ul>
+<li>Highly customizable</li>
+<li>Declarative API</li>
+<li>Lightweight (only depends on common scientific Python packages)</li>
+<li>Custom voxel image slicing engine</li>
+<li>Custom layout and style systems built on <code>matplotlib</code></li>
+</ul>
+
+<h2 id="tutorials">Tutorials</h2>
+
+<p>To get started <a href="examples/README.md">have a look at the tutorials</a>.</p>
+</div>
+
                         <input id="mod-mrirage-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-mrirage-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span> <span class="nn">.composition</span> <span class="kn">import</span> <span class="o">*</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a><span class="kn">from</span> <span class="nn">.datacube</span> <span class="kn">import</span> <span class="o">*</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="kn">from</span> <span class="nn">.loader</span> <span class="kn">import</span> <span class="o">*</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a><span class="kn">from</span> <span class="nn">.slicer</span> <span class="kn">import</span> <span class="o">*</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a><span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="o">*</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a><span class="sd">.. include:: ../../README.md</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a><span class="kn">from</span> <span class="nn">.composition</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a><span class="kn">from</span> <span class="nn">.datacube</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a><span class="kn">from</span> <span class="nn">.loader</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">8</span></a><span class="kn">from</span> <span class="nn">.slicer</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">9</span></a><span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="o">*</span>
 </span></pre></div>
 
 
