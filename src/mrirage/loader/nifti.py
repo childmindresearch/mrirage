@@ -3,7 +3,7 @@ from typing import Any, Union
 import nibabel as nib
 from nibabel.spatialimages import SpatialImage as NibabelImage
 
-from .. import Datacube
+from ..datacube.datacube import Datacube
 
 
 def get_nifti_cube(image: Union[str, Any]):

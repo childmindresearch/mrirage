@@ -3,7 +3,8 @@ from typing import List, Optional, Tuple, Union
 import fineslice as fine
 import numpy as np
 
-from ..composition import Composition, CompositionGrid, Layer, Style, View
+from ..composition import Composition, CompositionGrid, Layer, View
+from ..composition.layer import Style
 
 
 def quick_add_xyz(

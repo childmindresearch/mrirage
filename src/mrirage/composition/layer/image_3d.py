@@ -8,7 +8,7 @@ import numpy as np
 from matplotlib import colors as pltcol
 from matplotlib import pyplot as plt
 
-from ... import Datacube
+from ...datacube.datacube import Datacube
 from ...loader.nifti import get_nifti_cube
 from .layer import Layer, Style
 
