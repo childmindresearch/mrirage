@@ -1,3 +1,7 @@
+"""
+.. include:: ../../README.md
+"""
+
 from .composition import *
 from .datacube import *
 from .loader import *
