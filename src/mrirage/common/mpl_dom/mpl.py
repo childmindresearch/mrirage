@@ -1,5 +1,5 @@
 from math import ceil
-from typing import List, Generator, Any
+from typing import Any, Generator, Iterable, List, Optional, Sequence
 
 import matplotlib.pyplot as plt
 
@@ -32,18 +32,20 @@ class MplElement:
     def __init__(self):
         self.pos = Box()
 
-    def pretty_str(self, indent='', indent_add='  ') -> str:
+    def pretty_str(self, indent="", indent_add="  ") -> str:
         if len(self.get_children()) == 0:
-            return f'{indent}{self.get_descriptor()}'
+            return f"{indent}{self.get_descriptor()}"
 
         indent_next = indent + indent_add
-        cs = ',\n'.join([c.pretty_str(indent_next, indent_add) for c in self.get_children()])
-        return f'{indent}{self.get_descriptor()}[\n{cs}\n{indent}]'
+        cs = ",\n".join(
+            [c.pretty_str(indent_next, indent_add) for c in self.get_children()]
+        )
+        return f"{indent}{self.get_descriptor()}[\n{cs}\n{indent}]"
 
-    def pretty_print(self, indent='', indent_add='  '):
+    def pretty_print(self, indent="", indent_add="  "):
         print(self.pretty_str(indent=indent, indent_add=indent_add))
 
-    def get_children(self) -> List['MplElement']:
+    def get_children(self) -> Sequence["MplElement"]:
         return []
 
     def get_descriptor(self):
@@ -67,11 +69,13 @@ class MplElement:
         return figure.add_axes(self.pos.as_tuple())
 
     @staticmethod
-    def create(n: int) -> List['MplElement']:
+    def create(n: int) -> List["MplElement"]:
         return [MplElement() for _ in range(n)]
 
     @staticmethod
-    def make_axes(figure: plt.Figure, axes_elements: List['MplElement']) -> List[plt.Axes]:
+    def make_axes(
+        figure: plt.Figure, axes_elements: List["MplElement"]
+    ) -> List[plt.Axes]:
         return [ae.create_axis(figure) for ae in axes_elements]
 
     def children_valid(self):
@@ -83,14 +87,20 @@ class MplElement:
     def __repr__(self):
         return self.get_descriptor()
 
-    def iter_recursive(self) -> Generator['MplElement', Any, None]:
+    def iter_recursive(self) -> Generator["MplElement", Any, None]:
         for child in self.get_children():
             yield child
             yield from child.iter_recursive()
 
 
 class MplDocument(MplElement):
-    def __init__(self, root: MplElement = None, width: float = 10, height: float = 8, dpi: float = 72):
+    def __init__(
+        self,
+        root: Optional[MplElement] = None,
+        width: float = 10,
+        height: float = 8,
+        dpi: float = 72,
+    ):
         super().__init__()
         self.width: float = width
         self.height: float = height
@@ -98,7 +108,7 @@ class MplDocument(MplElement):
         self.root: MplElement = MplElement() if root is None else root
         self.pos = Box()
 
-    def get_children(self) -> List['MplElement']:
+    def get_children(self) -> List["MplElement"]:
         return [self.root]
 
     def align_children(self, fix_w: float, fix_h: float):
@@ -108,15 +118,21 @@ class MplDocument(MplElement):
         return self.align_recursive(fix_w=self.width, fix_h=self.height)
 
     def get_descriptor(self):
-        return f'Document{self.pos}'
+        return f"Document{self.pos}"
 
     def make_figure(self) -> plt.Figure:
         return plt.figure(figsize=(self.width, self.height), dpi=self.dpi)
 
 
 class MplDivider(MplElement):
-    def __init__(self, first: MplElement = None, second: MplElement = None, vertical: bool = False,
-                 division: float = 0.5, fixed=False):
+    def __init__(
+        self,
+        first: Optional[MplElement] = None,
+        second: Optional[MplElement] = None,
+        vertical: bool = False,
+        division: float = 0.5,
+        fixed=False,
+    ):
         super().__init__()
         self.vertical = vertical
         self.division = division
@@ -124,13 +140,15 @@ class MplDivider(MplElement):
         self.second = second if second is not None else MplElement()
         self.fixed = fixed
 
-    def get_children(self) -> List['MplElement']:
+    def get_children(self) -> List["MplElement"]:
         return [self.first, self.second]
 
     def get_descriptor(self):
-        return f'Divider{self.pos}(fixed={self.fixed}, vertical={self.vertical}, division={self.division})'
+        return f"Divider{self.pos}(fixed={self.fixed}, vertical={self.vertical}, division={self.division})"
 
-    def align_children(self, fix_w: float, fix_h: float):  # todo avoid instance creation
+    def align_children(
+        self, fix_w: float, fix_h: float
+    ):  # todo avoid instance creation
         if self.fixed:
             ref_w = 1 / fix_w
             ref_h = 1 / fix_h
@@ -150,8 +168,15 @@ class MplDivider(MplElement):
 
 
 class MplMargin(MplElement):
-    def __init__(self, child: MplElement = None, left: float = 0, right: float = 0, top: float = 0,
-                 bottom: float = 0, fixed=False):
+    def __init__(
+        self,
+        child: Optional[MplElement] = None,
+        left: float = 0,
+        right: float = 0,
+        top: float = 0,
+        bottom: float = 0,
+        fixed=False,
+    ):
         super().__init__()
         self.left = left
         self.right = right
@@ -160,12 +185,14 @@ class MplMargin(MplElement):
         self.fixed = fixed
         self.child = child if child is not None else MplElement()
 
-    def get_children(self) -> List['MplElement']:
+    def get_children(self) -> List["MplElement"]:
         return [self.child]
 
     def get_descriptor(self):
-        return f'Margin{self.pos}(fixed={self.fixed}, left={self.left}, ' \
-               f'right={self.right}, top={self.top}, bottom={self.bottom})'
+        return (
+            f"Margin{self.pos}(fixed={self.fixed}, left={self.left}, "
+            f"right={self.right}, top={self.top}, bottom={self.bottom})"
+        )
 
     def align_children(self, fix_w: float, fix_h: float):
         if self.fixed:
@@ -182,17 +209,22 @@ class MplMargin(MplElement):
 
 
 class MplGrid(MplElement):
-    def __init__(self, children: List['MplElement'] = None, nbreak: int = 3, vertical: bool = False):
+    def __init__(
+        self,
+        children: Optional[Sequence["MplElement"]] = None,
+        nbreak: int = 3,
+        vertical: bool = False,
+    ):
         super().__init__()
-        self.children: List['MplElement'] = [] if children is None else children
+        self.children: Sequence["MplElement"] = [] if children is None else children
         self.nbreak = nbreak
         self.vertical = vertical
 
-    def get_children(self) -> List['MplElement']:
+    def get_children(self) -> Sequence["MplElement"]:
         return self.children
 
     def get_descriptor(self):
-        return f'Grid{self.pos}()'
+        return f"Grid{self.pos}()"
 
     def align_children(self, fix_w: float, fix_h: float):
         nrows = ceil(len(self.children) / self.nbreak)
@@ -212,19 +244,19 @@ class MplGrid(MplElement):
 
 
 def _debug_axes(axes: List[plt.Axes]):
-    color_map = plt.get_cmap('Set1')
+    color_map: Any = plt.get_cmap("Set1")
     for i, ax in enumerate(axes):
         col = color_map.colors[i % len(color_map.colors)]
         ax.xaxis.set_visible(False)
         ax.yaxis.set_visible(False)
         ax.patch.set_facecolor(col)
         ax.patch.set_alpha(0.1)
-        for pos in ['top', 'bottom', 'right', 'left']:
+        for pos in ["top", "bottom", "right", "left"]:
             ax.spines[pos].set_edgecolor(col)
     return axes
 
 
-def _debug_document(doc: MplDocument, fig: plt.Figure = None, align=True):
+def _debug_document(doc: MplDocument, fig: Optional[plt.Figure] = None, align=True):
     if align:
         doc.align()
     fig = fig if fig is not None else doc.make_figure()
@@ -236,46 +268,29 @@ def main():
     doc = MplDocument(width=10, height=8, dpi=72)
 
     view_containers = [
-        MplMargin(
-            MplElement(),
-            left=0.4,
-            bottom=0.32,
-            fixed=True
-        ) for _ in range(7)
+        MplMargin(MplElement(), left=0.4, bottom=0.32, fixed=True) for _ in range(7)
     ]
     view_elements = [c.child for c in view_containers]
 
-    legend_containers = [
-        MplMargin(
-            MplElement()
-        ) for _ in range(3)
-    ]
+    legend_containers = [MplMargin(MplElement()) for _ in range(3)]
     legend_elements = [c.child for c in legend_containers]
 
     doc.root = MplMargin(
         MplDivider(
-            MplMargin(
-                MplGrid(
-                    legend_containers
-                ),
-                left=0.2,
-                right=0.2
-            ),
-            MplGrid(
-                view_containers
-            ),
+            MplMargin(MplGrid(legend_containers), left=0.2, right=0.2),
+            MplGrid(view_containers),
             vertical=True,
             division=0.3,
-            fixed=True
+            fixed=True,
         ),
         left=0.05,
         right=0.05,
         top=0.05,
-        bottom=0.05
+        bottom=0.05,
     )
 
     if not doc.align():
-        print('Margin error')
+        print("Margin error")
         return
     doc.pretty_print()
 
@@ -287,15 +302,15 @@ def main():
 
     for i, a in enumerate(view_axes):
         a.plot([1, 0], [0, 1])
-        a.text(0, 0, f'#{i}')
+        a.text(0, 0, f"#{i}")
     for i, a in enumerate(legend_axes):
-        a.axis('off')
-        a.imshow([[1]], aspect='auto')
-        a.text(0, 0, f'#{i}', color='w')
+        a.axis("off")
+        a.imshow([[1]], aspect="auto")
+        a.text(0, 0, f"#{i}", color="w")
 
-    fig.suptitle('Hello')
+    fig.suptitle("Hello")
     fig.show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

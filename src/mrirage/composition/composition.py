@@ -1,27 +1,29 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Union, Tuple
+from typing import List, Optional, Tuple, Union
 
 from matplotlib import pyplot as plt
 
+from ..common import rep_tuple
 from .layer.layer import Layer
 from .layer.style_data import Style
 from .view.view import View
-from ..common import rep_tuple
 
 
 class Composition(ABC):
     def __init__(
-            self,
-            layers: Optional[List[Layer]] = None,
-            views: Optional[List[View]] = None,
-            style: Optional[Style] = None,
-            figure_size: Optional[Union[float, Tuple[float, float]]] = None,
-            dpi: int = 200
+        self,
+        layers: Optional[List[Layer]] = None,
+        views: Optional[List[View]] = None,
+        style: Optional[Style] = None,
+        figure_size: Optional[Union[float, Tuple[float, float]]] = None,
+        dpi: int = 200,
     ):
         self.layers: List[Layer] = [] if layers is None else layers
         self.views: List[View] = [] if views is None else views
         self.style = Style() if style is None else style
-        self.figure_width, self.figure_height = rep_tuple(2, figure_size) if figure_size is not None else (10., 6.)
+        self.figure_width, self.figure_height = (
+            rep_tuple(2, figure_size) if figure_size is not None else (10.0, 6.0)
+        )
         self.dpi = dpi
 
     def render(self) -> Optional[plt.Figure]:

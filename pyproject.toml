@@ -1,11 +1,47 @@
+[tool.poetry]
+name = "mrirage"
+version = "0.1.0"
+authors = ["Florian Rupprecht <floruppr@gmail.com>"]
+license = "MIT"
+description = "MRI visualization"
+readme = "README.md"
+repository = "https://github.com/nx10/mrirage"
+homepage = "https://github.com/nx10/mrirage"
+documentation = "https://github.com/nx10/mrirage/docs"
+keywords = ["MRI", "visualization"]
+packages = [{include = "mrirage", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10,<3.13"
+fineslice = "^0.0.2"
+matplotlib = "^3.8.0"
+nibabel = "^5.1.0"
+scipy = "^1.11.3"
+numpy = "^1.26.1"
+
+[tool.poetry.dev-dependencies]
+pdoc = "^14.0.0"
+pytest = "^7.3.2"
+mypy = "^1.4.0"
+black = "^23.3.0"
+isort = "^5.12.0"
+pre-commit = "^3.3.3"
+pytest-cov = "^4.1.0"
+
+[tool.poetry.extras]
+docs = ["pdoc"]
+
 [build-system]
-requires = ["setuptools>=42"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 pythonpath = [
-  ".", "src"
+  "src"
 ]
-testpaths = [
-    "tests"
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = [
+  "examples/",
 ]

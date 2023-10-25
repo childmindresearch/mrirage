@@ -1,13 +1,14 @@
 from abc import ABC
-from typing import Optional, Union, Tuple
+from typing import Optional, Tuple, Union
 
 import fineslice as fine
 import matplotlib.pyplot as plt
 import numpy as np
 
 from mrirage.composition.layer.style_data import Style
-from .layer import Layer
+
 from ...common import rep_tuple
+from .layer import Layer
 
 
 def _get_axlims(plt_ax: plt.Axes):
@@ -18,20 +19,22 @@ def _get_axlims(plt_ax: plt.Axes):
 
 class LayerCrossBase(Layer, ABC):
     def __init__(
-            self,
-            padding_inner=0.,
-            padding_outer=0.,
-            style: Style = None,
-            legend=False,
-            z_index: int = 0
+        self,
+        padding_inner=0.0,
+        padding_outer=0.0,
+        style: Optional[Style] = None,
+        legend=False,
+        z_index: int = 0,
     ):
         super().__init__(legend=legend, z_index=z_index, style=style)
         self.padding_inner = padding_inner
         self.padding_outer = padding_outer
-        self._set_default_style(Style(cap_style='round'))
+        self._set_default_style(Style(cap_style="round"))
 
     def _render_cross(self, plt_ax: plt.Axes, view_axis: int, point: np.ndarray):
-        var_dims = np.concatenate([np.arange(3) != view_axis, np.full((len(point) - 3,), False)])
+        var_dims = np.concatenate(
+            [np.arange(3) != view_axis, np.full((len(point) - 3,), False)]
+        )
         px, py = np.array(point)[var_dims]
 
         xmin, xmax, ymin, ymax = _get_axlims(plt_ax)
@@ -41,35 +44,54 @@ class LayerCrossBase(Layer, ABC):
         ymin += self.padding_outer
         ymax -= self.padding_outer
 
-        x = [px - self.padding_inner, xmin, None, px + self.padding_inner, xmax, None, px, px, None, px, px]
-        y = [py, py, None, py, py, None, py - self.padding_inner, ymin, None, py + self.padding_inner, ymax]
+        x = [
+            px - self.padding_inner,
+            xmin,
+            None,
+            px + self.padding_inner,
+            xmax,
+            None,
+            px,
+            px,
+            None,
+            px,
+            px,
+        ]
+        y = [
+            py,
+            py,
+            None,
+            py,
+            py,
+            None,
+            py - self.padding_inner,
+            ymin,
+            None,
+            py + self.padding_inner,
+            ymax,
+        ]
 
-        self._draw_style.render(
-            x, y,
-            plt_ax=plt_ax
-        )
+        assert self._draw_style is not None
+        self._draw_style.render(x, y, plt_ax=plt_ax)
 
         return True
 
     def render_legend(self, ax: plt.Axes, vertical: bool):
-        self._draw_style.render(
-            [0, 1],
-            [0, 0],
-            plt_ax=ax
-        )
-        ax.axis('off')
-        self._draw_style.render_set_title('Slices', loc='left', plt_ax=ax)
+        assert self._draw_style is not None
+        self._draw_style.render([0, 1], [0, 0], plt_ax=ax)
+        ax.axis("off")
+        self._draw_style.render_set_title("Slices", loc="left", plt_ax=ax)
 
 
 class LayerCrossOrigin(LayerCrossBase):
     def view_render(
-            self,
-            plt_ax: plt.Axes,
-            view_axis: int,
-            bounds: np.ndarray,
-            d_origin: Optional[fine.types.SamplerPoint] = None,
-            d_points: Optional[fine.types.SamplerPoints] = None,
-            d_axis: Optional[int] = None
+        self,
+        plt_ax: plt.Axes,
+        view_axis: int,
+        bounds: Optional[np.ndarray] = None,
+        d_origin: Optional[fine.types.SamplerPoint] = None,
+        d_points: Optional[fine.types.SamplerPoints] = None,
+        d_axis: Optional[int] = None,
     ) -> bool:
         if d_origin is not None:
             return self._render_cross(plt_ax, view_axis, d_origin)
@@ -78,13 +100,13 @@ class LayerCrossOrigin(LayerCrossBase):
 
 class LayerCross(LayerCrossBase):
     def view_render(
-            self,
-            plt_ax: plt.Axes,
-            view_axis: int,
-            bounds: np.ndarray,
-            d_origin: Optional[fine.types.SamplerPoint] = None,
-            d_points: Optional[fine.types.SamplerPoints] = None,
-            d_axis: Optional[int] = None
+        self,
+        plt_ax: plt.Axes,
+        view_axis: int,
+        bounds: Optional[np.ndarray] = None,
+        d_origin: Optional[fine.types.SamplerPoint] = None,
+        d_points: Optional[fine.types.SamplerPoints] = None,
+        d_axis: Optional[int] = None,
     ) -> bool:
         if d_points is not None:
             # todo avoid loop, only one .plot() call
@@ -96,25 +118,25 @@ class LayerCross(LayerCrossBase):
 
 class LayerLine(Layer):
     def __init__(
-            self,
-            padding_inner=0.,
-            padding_outer=0.,
-            style: Style = None,
-            legend=False,
-            z_index: int = 0
+        self,
+        padding_inner=0.0,
+        padding_outer=0.0,
+        style: Optional[Style] = None,
+        legend=False,
+        z_index: int = 0,
     ):
         super().__init__(legend=legend, z_index=z_index, style=style)
         self.padding_inner = padding_inner
         self.padding_outer = padding_outer
 
     def view_render(
-            self,
-            plt_ax: plt.Axes,
-            view_axis: int,
-            bounds: np.ndarray,
-            d_origin: Optional[fine.types.SamplerPoint] = None,
-            d_points: Optional[fine.types.SamplerPoints] = None,
-            d_axis: Optional[int] = None
+        self,
+        plt_ax: plt.Axes,
+        view_axis: int,
+        bounds: Optional[np.ndarray] = None,
+        d_origin: Optional[fine.types.SamplerPoint] = None,
+        d_points: Optional[fine.types.SamplerPoints] = None,
+        d_axis: Optional[int] = None,
     ) -> bool:
         if d_points is None and d_origin is not None:
             d_points = [d_origin]
@@ -138,86 +160,91 @@ class LayerLine(Layer):
                 x += [plt_min, plt_pmax, None]
                 y += [p, p, None]
 
-        self._draw_style.render(
-            x, y, plt_ax=plt_ax
-        )
+        assert self._draw_style is not None
+        self._draw_style.render(x, y, plt_ax=plt_ax)
 
         return True
 
     def render_legend(self, ax: plt.Axes, vertical: bool):
-        self._draw_style.render(
-            [0, 1],
-            [0, 0],
-            plt_ax=ax
-        )
-        ax.axis('off')
-        self._draw_style.render_set_title('Slices', loc='left', plt_ax=ax)
+        assert self._draw_style is not None
+        self._draw_style.render([0, 1], [0, 0], plt_ax=ax)
+        ax.axis("off")
+        self._draw_style.render_set_title("Slices", loc="left", plt_ax=ax)
 
 
 class LayerLR(Layer):
     def __init__(
-            self,
-            padding: Union[float, Tuple[float, float]] = 0,
-            label: Tuple[str, str] = ('L', 'R'),
-            style: Style = None,
-            z_index: int = 0
+        self,
+        padding: Union[float, Tuple[float, float]] = 0,
+        label: Tuple[str, str] = ("L", "R"),
+        style: Optional[Style] = None,
+        z_index: int = 0,
     ):
         super().__init__(legend=False, z_index=z_index, style=style)
         self.label_left, self.label_right = label
         self.pad_x, self.pad_y = rep_tuple(2, padding)
 
     def view_render(
-            self,
-            plt_ax: plt.Axes,
-            view_axis: int,
-            bounds: np.ndarray,
-            d_origin: Optional[fine.types.SamplerPoint] = None,
-            d_points: Optional[fine.types.SamplerPoints] = None,
-            d_axis: Optional[int] = None
+        self,
+        plt_ax: plt.Axes,
+        view_axis: int,
+        bounds: Optional[np.ndarray] = None,
+        d_origin: Optional[fine.types.SamplerPoint] = None,
+        d_points: Optional[fine.types.SamplerPoints] = None,
+        d_axis: Optional[int] = None,
     ) -> bool:
         if view_axis == 0:
             return False
 
         xmin, xmax, ymin, _ = _get_axlims(plt_ax)
 
+        assert self._draw_style is not None
         self._draw_style.render_text(
-            xmin + self.pad_x, ymin + self.pad_y,
+            xmin + self.pad_x,
+            ymin + self.pad_y,
             self.label_left,
-            ha='left', va='bottom',
-            plt_ax=plt_ax
+            ha="left",
+            va="bottom",
+            plt_ax=plt_ax,
         )
 
         self._draw_style.render_text(
-            xmax - self.pad_x, ymin + self.pad_y,
+            xmax - self.pad_x,
+            ymin + self.pad_y,
             self.label_right,
-            ha='right', va='bottom',
-            plt_ax=plt_ax
+            ha="right",
+            va="bottom",
+            plt_ax=plt_ax,
         )
 
         return True
 
 
 class LayerCoordinate(Layer):
-    def __init__(self,
-                 round_value: Optional[bool] = None,
-                 style: Style = None,
-                 padding: Union[float, Tuple[float, float]] = 0,
-                 label: Tuple[str, str] = ('L', 'R'),
-                 z_index: int = 0):
+    def __init__(
+        self,
+        round_value: Optional[bool] = None,
+        style: Optional[Style] = None,
+        padding: Union[float, Tuple[float, float]] = 0,
+        label: Tuple[str, str] = ("L", "R"),
+        z_index: int = 0,
+    ):
         super().__init__(legend=False, z_index=z_index, style=style)
         self.label_left, self.label_right = label
-        self.pad_x, self.pad_y = padding if isinstance(padding, tuple) else (padding, padding)
-        self.axis_labels = ('X', 'Y', 'Z')
+        self.pad_x, self.pad_y = (
+            padding if isinstance(padding, tuple) else (padding, padding)
+        )
+        self.axis_labels = ("X", "Y", "Z")
         self.round_value = round_value
 
     def view_render(
-            self,
-            plt_ax: plt.Axes,
-            view_axis: int,
-            bounds: np.ndarray,
-            d_origin: Optional[fine.types.SamplerPoint] = None,
-            d_points: Optional[fine.types.SamplerPoints] = None,
-            d_axis: Optional[int] = None
+        self,
+        plt_ax: plt.Axes,
+        view_axis: int,
+        bounds: Optional[np.ndarray] = None,
+        d_origin: Optional[fine.types.SamplerPoint] = None,
+        d_points: Optional[fine.types.SamplerPoints] = None,
+        d_axis: Optional[int] = None,
     ) -> bool:
         if d_origin is None:
             return False
@@ -232,11 +259,14 @@ class LayerCoordinate(Layer):
         elif self.round_value:
             val = round(val)
 
+        assert self._draw_style is not None
         self._draw_style.render_text(
-            xmin + self.pad_x, ymax - self.pad_y,
-            f'${lab} = {val}$',
-            ha='left', va='top',
-            plt_ax=plt_ax
+            xmin + self.pad_x,
+            ymax - self.pad_y,
+            f"${lab} = {val}$",
+            ha="left",
+            va="top",
+            plt_ax=plt_ax,
         )
 
         return True

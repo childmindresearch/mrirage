@@ -1,1 +1,1 @@
-from .mpl import MplDocument, MplMargin, MplGrid, MplDivider, MplElement, Box
+from .mpl import Box, MplDivider, MplDocument, MplElement, MplGrid, MplMargin

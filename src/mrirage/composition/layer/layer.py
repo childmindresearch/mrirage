@@ -14,10 +14,12 @@ class Layer(ABC):
     ``Layer.view_render()`` and ``Layer.render_legend()``.
     """
 
-    def __init__(self, style: Style = None, legend: bool = False, z_index: int = 0):
-        self.style = style
-        self._default_style = None
-        self._draw_style = None
+    def __init__(
+        self, style: Optional[Style] = None, legend: bool = False, z_index: int = 0
+    ):
+        self.style: Optional[Style] = style
+        self._default_style: Optional[Style] = None
+        self._draw_style: Optional[Style] = None
         self.legend = legend
         self.z_index = z_index
 
@@ -38,7 +40,9 @@ class Layer(ABC):
             if self._default_style is None:
                 self._draw_style = self.style.override(base_style)
             else:
-                self._draw_style = self.style.override(self._default_style).override(base_style)
+                self._draw_style = self.style.override(self._default_style).override(
+                    base_style
+                )
 
     def render_legend(self, ax: plt.Axes, vertical: bool):
         pass
@@ -68,12 +72,12 @@ class Layer(ABC):
         return self.get_z_index() >= other.get_z_index()
 
     def view_render(  # pylint: disable=unused-argument
-            self,
-            plt_ax: plt.Axes,
-            view_axis: int,
-            bounds: np.ndarray,
-            d_origin: Optional[fine.types.SamplerPoint] = None,
-            d_points: Optional[fine.types.SamplerPoints] = None,
-            d_axis: Optional[int] = None
+        self,
+        plt_ax: plt.Axes,
+        view_axis: int,
+        bounds: Optional[np.ndarray] = None,
+        d_origin: Optional[fine.types.SamplerPoint] = None,
+        d_points: Optional[fine.types.SamplerPoints] = None,
+        d_axis: Optional[int] = None,
     ) -> bool:
         return False

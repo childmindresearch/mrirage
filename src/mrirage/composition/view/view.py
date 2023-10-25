@@ -15,12 +15,12 @@ class View:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(
-            self,
-            view_axis: int = 0,
-            bounds: Optional[np.ndarray] = None,
-            origin: Optional[fine.types.SamplerPointLike] = None,
-            points: Optional[fine.types.SamplerPointsLike] = None,
-            axis: Optional[int] = None
+        self,
+        view_axis: int = 0,
+        bounds: Optional[np.ndarray] = None,
+        origin: Optional[fine.types.SamplerPointLike] = None,
+        points: Optional[fine.types.SamplerPointsLike] = None,
+        axis: Optional[int] = None,
     ):
         self.view_axis = view_axis
         self.bounds = bounds
@@ -29,6 +29,7 @@ class View:  # pylint: disable=too-few-public-methods
         self.axis = axis
 
     def render(self, layers: List[Layer], plt_ax: plt.Axes) -> None:
+        assert self.bounds is not None
         for layer in layers:
             layer.view_render(
                 plt_ax=plt_ax,
@@ -36,5 +37,5 @@ class View:  # pylint: disable=too-few-public-methods
                 bounds=self.bounds,
                 d_origin=self.origin,
                 d_points=self.points,
-                d_axis=self.axis
+                d_axis=self.axis,
             )
