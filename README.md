@@ -2,6 +2,13 @@
 
 # `mrirage`
 
+[![Build](https://github.com/cmi-dair/mrirage/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/cmi-dair/mrirage/actions/workflows/test.yaml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/cmi-dair/mrirage/branch/main/graph/badge.svg?token=22HWWFWPW5)](https://codecov.io/gh/cmi-dair/mrirage)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/cmi-dair/mrirage/blob/main/LICENSE)
+[![pages](https://img.shields.io/badge/api-docs-blue)](https://cmi-dair.github.io/mrirage)
+
 `mrirage` (pronounced _mirage_) is a scientific visualization library for Python 
 with the goal of creating and automating publication ready figures from 3D voxel MRI images.
 

@@ -14,6 +14,10 @@ from .layer import Layer, Style
 
 
 class LayerVoxel(Layer):
+    """
+    A layer that renders a 3D voxel image slice (optionally with an alpha mask).
+    """
+
     def __init__(  # pylint: disable=too-many-arguments
         self,
         data: Union[Datacube, Any],

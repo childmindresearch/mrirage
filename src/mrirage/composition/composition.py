@@ -10,6 +10,16 @@ from .view.view import View
 
 
 class Composition(ABC):
+    """
+    Abstract composition base class.
+
+    A composition is a collection of layers and views. It is responsible for
+    rendering the layers and views into a figure.
+
+    Composition components should (in most cases) overload
+    ``Composition._render_figure()`` and ``Composition.get_figure()``.
+    """
+
     def __init__(
         self,
         layers: Optional[List[Layer]] = None,

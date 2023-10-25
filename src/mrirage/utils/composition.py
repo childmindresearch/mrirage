@@ -11,7 +11,19 @@ def quick_add_xyz(
     composition: Composition,
     origin: Optional[fine.types.SamplerPointLike],
     bounds: Optional[np.ndarray] = None,
-):
+) -> None:
+    """
+    Add three views to a composition, one for each axis.
+
+    Args:
+        composition: Composition to add views to.
+        origin: Origin of the views.
+        bounds: Bounds of the views.
+
+    Returns:
+        None
+
+    """
     for i in range(3):
         composition.views.append(
             View(
@@ -33,6 +45,23 @@ def quick_xyz(
     legend_scale: float = 0.6,
     style: Optional[Style] = None,
 ) -> CompositionGrid:
+    """
+    Create a composition with three views, one for each axis.
+
+    Args:
+        layers: Layers to add to the composition.
+        origin: Origin of the views.
+        bounds: Bounds of the views.
+        figure_size: Size of the figure.
+        dpi: DPI of the figure.
+        color_bg: Background color of the figure.
+        nbreak: Number of elements in a row.
+        legend_scale: Scale of the legend.
+        style: Style of the composition.
+
+    Returns:
+        CompositionGrid
+    """
     composition = CompositionGrid(
         layers=layers,
         figure_size=figure_size,

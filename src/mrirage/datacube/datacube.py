@@ -6,12 +6,25 @@ from scipy.ndimage import gaussian_filter
 
 
 class Datacube:
+    """
+    Utility class for storing 3D voxel images and affine matrices.
+
+    Provides pass through functions for numpy operations on the image.
+    """
+
     def __init__(
         self,
         image: np.ndarray,
         affine: np.ndarray,
         affine_inv: Optional[np.ndarray] = None,
     ):
+        """
+        Args:
+            image: 3D voxel image
+            affine: affine matrix
+            affine_inv: inverse of affine matrix (optional, will be computed if not provided)
+        """
+        assert image.ndim == 3, "Datacube must be 3D"
         self.image = image
         self.affine = affine
         self.affine_inv = (
@@ -20,13 +33,13 @@ class Datacube:
 
     def transform(self, p: Union[np.ndarray, Iterable]):
         """
-        Data space -> reference space
+        Local space -> world space
         """
         return np.dot(self.affine, p)  # type: ignore
 
     def transform_inv(self, p: Union[np.ndarray, Iterable]):
         """
-        Reference space -> data space
+        World space -> local space
         """
         return np.dot(self.affine_inv, p)  # type: ignore
 

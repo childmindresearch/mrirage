@@ -11,6 +11,10 @@ from .view.view import View
 
 
 class CompositionDom(Composition, ABC):
+    """
+    mpl_dom-based composition base class.
+    """
+
     def __init__(
         self,
         layers: Optional[List[Layer]] = None,
@@ -67,6 +71,10 @@ class CompositionDom(Composition, ABC):
 
 
 class CompositionGrid(CompositionDom):
+    """
+    Composition that renders views in a grid.
+    """
+
     def __init__(
         self,
         layers: Optional[List[Layer]] = None,
@@ -78,6 +86,17 @@ class CompositionGrid(CompositionDom):
         legend_scale: float = 0.6,
         style: Optional[Style] = None,
     ):
+        """
+        Args:
+            layers: Layers to add to the composition.
+            views: Views to add to the composition.
+            figure_size: Size of the figure.
+            dpi: DPI of the figure.
+            color_bg: Background color of the figure.
+            nbreak: Number of elements in a row.
+            legend_scale: Scale of the legend.
+            style: Style of the composition.
+        """
         super().__init__(
             layers=layers,
             views=views,

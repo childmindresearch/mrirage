@@ -1,3 +1,9 @@
+"""
+This module provides a simple HTML-DOM-like structure for constructing matplotlib figures.
+Because the matplotlib API is bad at margins and alignment, this module provides an
+overly complicated way to construct a figure with a grid of axes, with margins and dividers.
+"""
+
 from math import ceil
 from typing import Any, Generator, Iterable, List, Optional, Sequence
 
