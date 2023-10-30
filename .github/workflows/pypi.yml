@@ -4,12 +4,6 @@ permissions:
   actions: "write"
 
 on:
-  workflow_run:
-    workflows: ["Python Tests"]
-    types:
-      - completed
-    branches:
-      - master
   push:
     tags:
      - '*'
