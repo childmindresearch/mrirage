@@ -27,10 +27,43 @@
                    pattern=".+" required>
 
 
-            <h2>Submodules</h2>
-            <ul>
-                    <li><a href="datacube/datacube.html">datacube</a></li>
-            </ul>
+
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="class" href="#Datacube">Datacube</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Datacube.__init__">Datacube</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Datacube.image">image</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Datacube.affine">affine</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Datacube.affine_inv">affine_inv</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Datacube.transform">transform</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Datacube.transform_inv">transform_inv</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Datacube.apply_gaussian">apply_gaussian</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Datacube.apply">apply</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Datacube.normalize">normalize</a>
+                        </li>
+                </ul>
+
+            </li>
+    </ul>
 
 
 
@@ -52,10 +85,380 @@
                         <label class="view-source-button" for="mod-datacube-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span> <span class="nn">.datacube</span> <span class="kn">import</span> <span class="n">Datacube</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Datacube&quot;</span><span class="p">]</span>
 </span></pre></div>
 
 
             </section>
+                <section id="Datacube">
+                            <input id="Datacube-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">Datacube</span>:
+
+                <label class="view-source-button" for="Datacube-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Datacube"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Datacube-9"><a href="#Datacube-9"><span class="linenos">  9</span></a><span class="k">class</span> <span class="nc">Datacube</span><span class="p">:</span>
+</span><span id="Datacube-10"><a href="#Datacube-10"><span class="linenos"> 10</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Datacube-11"><a href="#Datacube-11"><span class="linenos"> 11</span></a><span class="sd">    Utility class for storing 3D voxel images and affine matrices.</span>
+</span><span id="Datacube-12"><a href="#Datacube-12"><span class="linenos"> 12</span></a>
+</span><span id="Datacube-13"><a href="#Datacube-13"><span class="linenos"> 13</span></a><span class="sd">    Provides pass through functions for numpy operations on the image.</span>
+</span><span id="Datacube-14"><a href="#Datacube-14"><span class="linenos"> 14</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Datacube-15"><a href="#Datacube-15"><span class="linenos"> 15</span></a>
+</span><span id="Datacube-16"><a href="#Datacube-16"><span class="linenos"> 16</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Datacube-17"><a href="#Datacube-17"><span class="linenos"> 17</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Datacube-18"><a href="#Datacube-18"><span class="linenos"> 18</span></a>        <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="Datacube-19"><a href="#Datacube-19"><span class="linenos"> 19</span></a>        <span class="n">affine</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="Datacube-20"><a href="#Datacube-20"><span class="linenos"> 20</span></a>        <span class="n">affine_inv</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Datacube-21"><a href="#Datacube-21"><span class="linenos"> 21</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Datacube-22"><a href="#Datacube-22"><span class="linenos"> 22</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Datacube-23"><a href="#Datacube-23"><span class="linenos"> 23</span></a><span class="sd">        Args:</span>
+</span><span id="Datacube-24"><a href="#Datacube-24"><span class="linenos"> 24</span></a><span class="sd">            image: 3D voxel image</span>
+</span><span id="Datacube-25"><a href="#Datacube-25"><span class="linenos"> 25</span></a><span class="sd">            affine: affine matrix</span>
+</span><span id="Datacube-26"><a href="#Datacube-26"><span class="linenos"> 26</span></a><span class="sd">            affine_inv: inverse of affine matrix</span>
+</span><span id="Datacube-27"><a href="#Datacube-27"><span class="linenos"> 27</span></a><span class="sd">                        (optional, will be computed if not provided)</span>
+</span><span id="Datacube-28"><a href="#Datacube-28"><span class="linenos"> 28</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Datacube-29"><a href="#Datacube-29"><span class="linenos"> 29</span></a>        <span class="k">assert</span> <span class="n">image</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Datacube must be 3D&quot;</span>
+</span><span id="Datacube-30"><a href="#Datacube-30"><span class="linenos"> 30</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image</span>
+</span><span id="Datacube-31"><a href="#Datacube-31"><span class="linenos"> 31</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">affine</span> <span class="o">=</span> <span class="n">affine</span>
+</span><span id="Datacube-32"><a href="#Datacube-32"><span class="linenos"> 32</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="Datacube-33"><a href="#Datacube-33"><span class="linenos"> 33</span></a>            <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">)</span> <span class="k">if</span> <span class="n">affine_inv</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">affine_inv</span>
+</span><span id="Datacube-34"><a href="#Datacube-34"><span class="linenos"> 34</span></a>        <span class="p">)</span>
+</span><span id="Datacube-35"><a href="#Datacube-35"><span class="linenos"> 35</span></a>
+</span><span id="Datacube-36"><a href="#Datacube-36"><span class="linenos"> 36</span></a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="Datacube-37"><a href="#Datacube-37"><span class="linenos"> 37</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Datacube-38"><a href="#Datacube-38"><span class="linenos"> 38</span></a><span class="sd">        Local space -&gt; world space</span>
+</span><span id="Datacube-39"><a href="#Datacube-39"><span class="linenos"> 39</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Datacube-40"><a href="#Datacube-40"><span class="linenos"> 40</span></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+</span><span id="Datacube-41"><a href="#Datacube-41"><span class="linenos"> 41</span></a>
+</span><span id="Datacube-42"><a href="#Datacube-42"><span class="linenos"> 42</span></a>    <span class="k">def</span> <span class="nf">transform_inv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="Datacube-43"><a href="#Datacube-43"><span class="linenos"> 43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Datacube-44"><a href="#Datacube-44"><span class="linenos"> 44</span></a><span class="sd">        World space -&gt; local space</span>
+</span><span id="Datacube-45"><a href="#Datacube-45"><span class="linenos"> 45</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Datacube-46"><a href="#Datacube-46"><span class="linenos"> 46</span></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+</span><span id="Datacube-47"><a href="#Datacube-47"><span class="linenos"> 47</span></a>
+</span><span id="Datacube-48"><a href="#Datacube-48"><span class="linenos"> 48</span></a>    <span class="k">def</span> <span class="nf">apply_gaussian</span><span class="p">(</span>
+</span><span id="Datacube-49"><a href="#Datacube-49"><span class="linenos"> 49</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span> <span class="n">truncate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span>
+</span><span id="Datacube-50"><a href="#Datacube-50"><span class="linenos"> 50</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-51"><a href="#Datacube-51"><span class="linenos"> 51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">gaussian_filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">truncate</span><span class="o">=</span><span class="n">truncate</span><span class="p">)</span>
+</span><span id="Datacube-52"><a href="#Datacube-52"><span class="linenos"> 52</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Datacube-53"><a href="#Datacube-53"><span class="linenos"> 53</span></a>
+</span><span id="Datacube-54"><a href="#Datacube-54"><span class="linenos"> 54</span></a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-55"><a href="#Datacube-55"><span class="linenos"> 55</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+</span><span id="Datacube-56"><a href="#Datacube-56"><span class="linenos"> 56</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Datacube-57"><a href="#Datacube-57"><span class="linenos"> 57</span></a>
+</span><span id="Datacube-58"><a href="#Datacube-58"><span class="linenos"> 58</span></a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span>
+</span><span id="Datacube-59"><a href="#Datacube-59"><span class="linenos"> 59</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">min_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">max_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">1.0</span>
+</span><span id="Datacube-60"><a href="#Datacube-60"><span class="linenos"> 60</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-61"><a href="#Datacube-61"><span class="linenos"> 61</span></a>        <span class="n">amin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+</span><span id="Datacube-62"><a href="#Datacube-62"><span class="linenos"> 62</span></a>        <span class="n">amax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+</span><span id="Datacube-63"><a href="#Datacube-63"><span class="linenos"> 63</span></a>        <span class="n">arange</span> <span class="o">=</span> <span class="n">amax</span> <span class="o">-</span> <span class="n">amin</span>
+</span><span id="Datacube-64"><a href="#Datacube-64"><span class="linenos"> 64</span></a>        <span class="k">if</span> <span class="n">arange</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Datacube-65"><a href="#Datacube-65"><span class="linenos"> 65</span></a>            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Could not normalize datacube (zero range).&quot;</span><span class="p">)</span>
+</span><span id="Datacube-66"><a href="#Datacube-66"><span class="linenos"> 66</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Datacube-67"><a href="#Datacube-67"><span class="linenos"> 67</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">-</span> <span class="n">amin</span><span class="p">)</span> <span class="o">/</span> <span class="n">arange</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_value</span> <span class="o">+</span> <span class="n">min_value</span>
+</span><span id="Datacube-68"><a href="#Datacube-68"><span class="linenos"> 68</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Datacube-69"><a href="#Datacube-69"><span class="linenos"> 69</span></a>
+</span><span id="Datacube-70"><a href="#Datacube-70"><span class="linenos"> 70</span></a>    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-71"><a href="#Datacube-71"><span class="linenos"> 71</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-72"><a href="#Datacube-72"><span class="linenos"> 72</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-73"><a href="#Datacube-73"><span class="linenos"> 73</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">(</span>
+</span><span id="Datacube-74"><a href="#Datacube-74"><span class="linenos"> 74</span></a>            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__lt__</span><span class="p">(</span><span class="n">other</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+</span><span id="Datacube-75"><a href="#Datacube-75"><span class="linenos"> 75</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+</span><span id="Datacube-76"><a href="#Datacube-76"><span class="linenos"> 76</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">,</span>
+</span><span id="Datacube-77"><a href="#Datacube-77"><span class="linenos"> 77</span></a>        <span class="p">)</span>
+</span><span id="Datacube-78"><a href="#Datacube-78"><span class="linenos"> 78</span></a>
+</span><span id="Datacube-79"><a href="#Datacube-79"><span class="linenos"> 79</span></a>    <span class="k">def</span> <span class="fm">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-80"><a href="#Datacube-80"><span class="linenos"> 80</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-81"><a href="#Datacube-81"><span class="linenos"> 81</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-82"><a href="#Datacube-82"><span class="linenos"> 82</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">(</span>
+</span><span id="Datacube-83"><a href="#Datacube-83"><span class="linenos"> 83</span></a>            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__le__</span><span class="p">(</span><span class="n">other</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+</span><span id="Datacube-84"><a href="#Datacube-84"><span class="linenos"> 84</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+</span><span id="Datacube-85"><a href="#Datacube-85"><span class="linenos"> 85</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">,</span>
+</span><span id="Datacube-86"><a href="#Datacube-86"><span class="linenos"> 86</span></a>        <span class="p">)</span>
+</span><span id="Datacube-87"><a href="#Datacube-87"><span class="linenos"> 87</span></a>
+</span><span id="Datacube-88"><a href="#Datacube-88"><span class="linenos"> 88</span></a>    <span class="k">def</span> <span class="fm">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-89"><a href="#Datacube-89"><span class="linenos"> 89</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-90"><a href="#Datacube-90"><span class="linenos"> 90</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-91"><a href="#Datacube-91"><span class="linenos"> 91</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">(</span>
+</span><span id="Datacube-92"><a href="#Datacube-92"><span class="linenos"> 92</span></a>            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__gt__</span><span class="p">(</span><span class="n">other</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+</span><span id="Datacube-93"><a href="#Datacube-93"><span class="linenos"> 93</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+</span><span id="Datacube-94"><a href="#Datacube-94"><span class="linenos"> 94</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">,</span>
+</span><span id="Datacube-95"><a href="#Datacube-95"><span class="linenos"> 95</span></a>        <span class="p">)</span>
+</span><span id="Datacube-96"><a href="#Datacube-96"><span class="linenos"> 96</span></a>
+</span><span id="Datacube-97"><a href="#Datacube-97"><span class="linenos"> 97</span></a>    <span class="k">def</span> <span class="fm">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-98"><a href="#Datacube-98"><span class="linenos"> 98</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-99"><a href="#Datacube-99"><span class="linenos"> 99</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-100"><a href="#Datacube-100"><span class="linenos">100</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">(</span>
+</span><span id="Datacube-101"><a href="#Datacube-101"><span class="linenos">101</span></a>            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__ge__</span><span class="p">(</span><span class="n">other</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+</span><span id="Datacube-102"><a href="#Datacube-102"><span class="linenos">102</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+</span><span id="Datacube-103"><a href="#Datacube-103"><span class="linenos">103</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">,</span>
+</span><span id="Datacube-104"><a href="#Datacube-104"><span class="linenos">104</span></a>        <span class="p">)</span>
+</span><span id="Datacube-105"><a href="#Datacube-105"><span class="linenos">105</span></a>
+</span><span id="Datacube-106"><a href="#Datacube-106"><span class="linenos">106</span></a>    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+</span><span id="Datacube-107"><a href="#Datacube-107"><span class="linenos">107</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-108"><a href="#Datacube-108"><span class="linenos">108</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-109"><a href="#Datacube-109"><span class="linenos">109</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">(</span>
+</span><span id="Datacube-110"><a href="#Datacube-110"><span class="linenos">110</span></a>            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+</span><span id="Datacube-111"><a href="#Datacube-111"><span class="linenos">111</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+</span><span id="Datacube-112"><a href="#Datacube-112"><span class="linenos">112</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">,</span>
+</span><span id="Datacube-113"><a href="#Datacube-113"><span class="linenos">113</span></a>        <span class="p">)</span>
+</span><span id="Datacube-114"><a href="#Datacube-114"><span class="linenos">114</span></a>
+</span><span id="Datacube-115"><a href="#Datacube-115"><span class="linenos">115</span></a>    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+</span><span id="Datacube-116"><a href="#Datacube-116"><span class="linenos">116</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-117"><a href="#Datacube-117"><span class="linenos">117</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-118"><a href="#Datacube-118"><span class="linenos">118</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">(</span>
+</span><span id="Datacube-119"><a href="#Datacube-119"><span class="linenos">119</span></a>            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__ne__</span><span class="p">(</span><span class="n">other</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+</span><span id="Datacube-120"><a href="#Datacube-120"><span class="linenos">120</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+</span><span id="Datacube-121"><a href="#Datacube-121"><span class="linenos">121</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">,</span>
+</span><span id="Datacube-122"><a href="#Datacube-122"><span class="linenos">122</span></a>        <span class="p">)</span>
+</span><span id="Datacube-123"><a href="#Datacube-123"><span class="linenos">123</span></a>
+</span><span id="Datacube-124"><a href="#Datacube-124"><span class="linenos">124</span></a>    <span class="k">def</span> <span class="fm">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-125"><a href="#Datacube-125"><span class="linenos">125</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">)</span>
+</span><span id="Datacube-126"><a href="#Datacube-126"><span class="linenos">126</span></a>
+</span><span id="Datacube-127"><a href="#Datacube-127"><span class="linenos">127</span></a>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-128"><a href="#Datacube-128"><span class="linenos">128</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-129"><a href="#Datacube-129"><span class="linenos">129</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-130"><a href="#Datacube-130"><span class="linenos">130</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">other</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">)</span>
+</span><span id="Datacube-131"><a href="#Datacube-131"><span class="linenos">131</span></a>
+</span><span id="Datacube-132"><a href="#Datacube-132"><span class="linenos">132</span></a>    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-133"><a href="#Datacube-133"><span class="linenos">133</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-134"><a href="#Datacube-134"><span class="linenos">134</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-135"><a href="#Datacube-135"><span class="linenos">135</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__sub__</span><span class="p">(</span><span class="n">other</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">)</span>
+</span><span id="Datacube-136"><a href="#Datacube-136"><span class="linenos">136</span></a>
+</span><span id="Datacube-137"><a href="#Datacube-137"><span class="linenos">137</span></a>    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-138"><a href="#Datacube-138"><span class="linenos">138</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-139"><a href="#Datacube-139"><span class="linenos">139</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-140"><a href="#Datacube-140"><span class="linenos">140</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__mul__</span><span class="p">(</span><span class="n">other</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">)</span>
+</span><span id="Datacube-141"><a href="#Datacube-141"><span class="linenos">141</span></a>
+</span><span id="Datacube-142"><a href="#Datacube-142"><span class="linenos">142</span></a>    <span class="k">def</span> <span class="fm">__pow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-143"><a href="#Datacube-143"><span class="linenos">143</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-144"><a href="#Datacube-144"><span class="linenos">144</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-145"><a href="#Datacube-145"><span class="linenos">145</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__pow__</span><span class="p">(</span><span class="n">other</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">)</span>
+</span><span id="Datacube-146"><a href="#Datacube-146"><span class="linenos">146</span></a>
+</span><span id="Datacube-147"><a href="#Datacube-147"><span class="linenos">147</span></a>    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-148"><a href="#Datacube-148"><span class="linenos">148</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-149"><a href="#Datacube-149"><span class="linenos">149</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-150"><a href="#Datacube-150"><span class="linenos">150</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__truediv__</span><span class="p">(</span><span class="n">other</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">)</span>
+</span><span id="Datacube-151"><a href="#Datacube-151"><span class="linenos">151</span></a>
+</span><span id="Datacube-152"><a href="#Datacube-152"><span class="linenos">152</span></a>    <span class="k">def</span> <span class="fm">__floordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-153"><a href="#Datacube-153"><span class="linenos">153</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-154"><a href="#Datacube-154"><span class="linenos">154</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-155"><a href="#Datacube-155"><span class="linenos">155</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__floordiv__</span><span class="p">(</span><span class="n">other</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">)</span>
+</span><span id="Datacube-156"><a href="#Datacube-156"><span class="linenos">156</span></a>
+</span><span id="Datacube-157"><a href="#Datacube-157"><span class="linenos">157</span></a>    <span class="k">def</span> <span class="fm">__mod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube-158"><a href="#Datacube-158"><span class="linenos">158</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+</span><span id="Datacube-159"><a href="#Datacube-159"><span class="linenos">159</span></a>            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">()</span>
+</span><span id="Datacube-160"><a href="#Datacube-160"><span class="linenos">160</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="fm">__mod__</span><span class="p">(</span><span class="n">other</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Utility class for storing 3D voxel images and affine matrices.</p>
+
+<p>Provides pass through functions for numpy operations on the image.</p>
+</div>
+
+
+                            <div id="Datacube.__init__" class="classattr">
+                                        <input id="Datacube.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">Datacube</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">image</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>,</span><span class="param">	<span class="n">affine</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>,</span><span class="param">	<span class="n">affine_inv</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+
+                <label class="view-source-button" for="Datacube.__init__-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Datacube.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Datacube.__init__-16"><a href="#Datacube.__init__-16"><span class="linenos">16</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Datacube.__init__-17"><a href="#Datacube.__init__-17"><span class="linenos">17</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Datacube.__init__-18"><a href="#Datacube.__init__-18"><span class="linenos">18</span></a>        <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="Datacube.__init__-19"><a href="#Datacube.__init__-19"><span class="linenos">19</span></a>        <span class="n">affine</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="Datacube.__init__-20"><a href="#Datacube.__init__-20"><span class="linenos">20</span></a>        <span class="n">affine_inv</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="Datacube.__init__-21"><a href="#Datacube.__init__-21"><span class="linenos">21</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Datacube.__init__-22"><a href="#Datacube.__init__-22"><span class="linenos">22</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Datacube.__init__-23"><a href="#Datacube.__init__-23"><span class="linenos">23</span></a><span class="sd">        Args:</span>
+</span><span id="Datacube.__init__-24"><a href="#Datacube.__init__-24"><span class="linenos">24</span></a><span class="sd">            image: 3D voxel image</span>
+</span><span id="Datacube.__init__-25"><a href="#Datacube.__init__-25"><span class="linenos">25</span></a><span class="sd">            affine: affine matrix</span>
+</span><span id="Datacube.__init__-26"><a href="#Datacube.__init__-26"><span class="linenos">26</span></a><span class="sd">            affine_inv: inverse of affine matrix</span>
+</span><span id="Datacube.__init__-27"><a href="#Datacube.__init__-27"><span class="linenos">27</span></a><span class="sd">                        (optional, will be computed if not provided)</span>
+</span><span id="Datacube.__init__-28"><a href="#Datacube.__init__-28"><span class="linenos">28</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Datacube.__init__-29"><a href="#Datacube.__init__-29"><span class="linenos">29</span></a>        <span class="k">assert</span> <span class="n">image</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Datacube must be 3D&quot;</span>
+</span><span id="Datacube.__init__-30"><a href="#Datacube.__init__-30"><span class="linenos">30</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image</span>
+</span><span id="Datacube.__init__-31"><a href="#Datacube.__init__-31"><span class="linenos">31</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">affine</span> <span class="o">=</span> <span class="n">affine</span>
+</span><span id="Datacube.__init__-32"><a href="#Datacube.__init__-32"><span class="linenos">32</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="Datacube.__init__-33"><a href="#Datacube.__init__-33"><span class="linenos">33</span></a>            <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">)</span> <span class="k">if</span> <span class="n">affine_inv</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">affine_inv</span>
+</span><span id="Datacube.__init__-34"><a href="#Datacube.__init__-34"><span class="linenos">34</span></a>        <span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>image:</strong>  3D voxel image</li>
+<li><strong>affine:</strong>  affine matrix</li>
+<li><strong>affine_inv:</strong>  inverse of affine matrix
+(optional, will be computed if not provided)</li>
+</ul>
+</div>
+
+
+                            </div>
+                            <div id="Datacube.image" class="classattr">
+                                <div class="attr variable">
+            <span class="name">image</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Datacube.image"></a>
+    
+    
+
+                            </div>
+                            <div id="Datacube.affine" class="classattr">
+                                <div class="attr variable">
+            <span class="name">affine</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Datacube.affine"></a>
+    
+    
+
+                            </div>
+                            <div id="Datacube.affine_inv" class="classattr">
+                                <div class="attr variable">
+            <span class="name">affine_inv</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Datacube.affine_inv"></a>
+    
+    
+
+                            </div>
+                            <div id="Datacube.transform" class="classattr">
+                                        <input id="Datacube.transform-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">transform</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">p</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>:</span></span>
+
+                <label class="view-source-button" for="Datacube.transform-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Datacube.transform"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Datacube.transform-36"><a href="#Datacube.transform-36"><span class="linenos">36</span></a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="Datacube.transform-37"><a href="#Datacube.transform-37"><span class="linenos">37</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Datacube.transform-38"><a href="#Datacube.transform-38"><span class="linenos">38</span></a><span class="sd">        Local space -&gt; world space</span>
+</span><span id="Datacube.transform-39"><a href="#Datacube.transform-39"><span class="linenos">39</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Datacube.transform-40"><a href="#Datacube.transform-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Local space -> world space</p>
+</div>
+
+
+                            </div>
+                            <div id="Datacube.transform_inv" class="classattr">
+                                        <input id="Datacube.transform_inv-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">transform_inv</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">p</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>:</span></span>
+
+                <label class="view-source-button" for="Datacube.transform_inv-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Datacube.transform_inv"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Datacube.transform_inv-42"><a href="#Datacube.transform_inv-42"><span class="linenos">42</span></a>    <span class="k">def</span> <span class="nf">transform_inv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+</span><span id="Datacube.transform_inv-43"><a href="#Datacube.transform_inv-43"><span class="linenos">43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Datacube.transform_inv-44"><a href="#Datacube.transform_inv-44"><span class="linenos">44</span></a><span class="sd">        World space -&gt; local space</span>
+</span><span id="Datacube.transform_inv-45"><a href="#Datacube.transform_inv-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Datacube.transform_inv-46"><a href="#Datacube.transform_inv-46"><span class="linenos">46</span></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affine_inv</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>World space -> local space</p>
+</div>
+
+
+                            </div>
+                            <div id="Datacube.apply_gaussian" class="classattr">
+                                        <input id="Datacube.apply_gaussian-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">apply_gaussian</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">sigma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]</span>,</span><span class="param">	<span class="n">truncate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span></span><span class="return-annotation">) -> <span class="n"><a href="#Datacube">Datacube</a></span>:</span></span>
+
+                <label class="view-source-button" for="Datacube.apply_gaussian-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Datacube.apply_gaussian"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Datacube.apply_gaussian-48"><a href="#Datacube.apply_gaussian-48"><span class="linenos">48</span></a>    <span class="k">def</span> <span class="nf">apply_gaussian</span><span class="p">(</span>
+</span><span id="Datacube.apply_gaussian-49"><a href="#Datacube.apply_gaussian-49"><span class="linenos">49</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span> <span class="n">truncate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span>
+</span><span id="Datacube.apply_gaussian-50"><a href="#Datacube.apply_gaussian-50"><span class="linenos">50</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube.apply_gaussian-51"><a href="#Datacube.apply_gaussian-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">gaussian_filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">truncate</span><span class="o">=</span><span class="n">truncate</span><span class="p">)</span>
+</span><span id="Datacube.apply_gaussian-52"><a href="#Datacube.apply_gaussian-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="Datacube.apply" class="classattr">
+                                        <input id="Datacube.apply-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">apply</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#Datacube">Datacube</a></span>:</span></span>
+
+                <label class="view-source-button" for="Datacube.apply-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Datacube.apply"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Datacube.apply-54"><a href="#Datacube.apply-54"><span class="linenos">54</span></a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube.apply-55"><a href="#Datacube.apply-55"><span class="linenos">55</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+</span><span id="Datacube.apply-56"><a href="#Datacube.apply-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="Datacube.normalize" class="classattr">
+                                        <input id="Datacube.normalize-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">normalize</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">min_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.0</span>,</span><span class="param">	<span class="n">max_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">1.0</span></span><span class="return-annotation">) -> <span class="n"><a href="#Datacube">Datacube</a></span>:</span></span>
+
+                <label class="view-source-button" for="Datacube.normalize-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Datacube.normalize"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Datacube.normalize-58"><a href="#Datacube.normalize-58"><span class="linenos">58</span></a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span>
+</span><span id="Datacube.normalize-59"><a href="#Datacube.normalize-59"><span class="linenos">59</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">min_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">max_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">1.0</span>
+</span><span id="Datacube.normalize-60"><a href="#Datacube.normalize-60"><span class="linenos">60</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Datacube&quot;</span><span class="p">:</span>
+</span><span id="Datacube.normalize-61"><a href="#Datacube.normalize-61"><span class="linenos">61</span></a>        <span class="n">amin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+</span><span id="Datacube.normalize-62"><a href="#Datacube.normalize-62"><span class="linenos">62</span></a>        <span class="n">amax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+</span><span id="Datacube.normalize-63"><a href="#Datacube.normalize-63"><span class="linenos">63</span></a>        <span class="n">arange</span> <span class="o">=</span> <span class="n">amax</span> <span class="o">-</span> <span class="n">amin</span>
+</span><span id="Datacube.normalize-64"><a href="#Datacube.normalize-64"><span class="linenos">64</span></a>        <span class="k">if</span> <span class="n">arange</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Datacube.normalize-65"><a href="#Datacube.normalize-65"><span class="linenos">65</span></a>            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Could not normalize datacube (zero range).&quot;</span><span class="p">)</span>
+</span><span id="Datacube.normalize-66"><a href="#Datacube.normalize-66"><span class="linenos">66</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Datacube.normalize-67"><a href="#Datacube.normalize-67"><span class="linenos">67</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">-</span> <span class="n">amin</span><span class="p">)</span> <span class="o">/</span> <span class="n">arange</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_value</span> <span class="o">+</span> <span class="n">min_value</span>
+</span><span id="Datacube.normalize-68"><a href="#Datacube.normalize-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                </section>
     </main>
 <script>
     function escapeHTML(html) {

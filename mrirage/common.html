@@ -29,9 +29,15 @@
 
             <h2>Submodules</h2>
             <ul>
-                    <li><a href="common/common.html">common</a></li>
                     <li><a href="common/mpl_dom.html">mpl_dom</a></li>
             </ul>
+
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="function" href="#rep_tuple">rep_tuple</a>
+            </li>
+    </ul>
 
 
 
@@ -54,10 +60,60 @@
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">mpl_dom</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a><span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">rep_tuple</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mpl_dom&quot;</span><span class="p">,</span> <span class="s2">&quot;rep_tuple&quot;</span><span class="p">]</span>
 </span></pre></div>
 
 
             </section>
+                <section id="rep_tuple">
+                            <input id="rep_tuple-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">rep_tuple</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">n</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">t</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="nb">tuple</span>:</span></span>
+
+                <label class="view-source-button" for="rep_tuple-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#rep_tuple"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="rep_tuple-5"><a href="#rep_tuple-5"><span class="linenos"> 5</span></a><span class="k">def</span> <span class="nf">rep_tuple</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+</span><span id="rep_tuple-6"><a href="#rep_tuple-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="rep_tuple-7"><a href="#rep_tuple-7"><span class="linenos"> 7</span></a><span class="sd">    Expand or constrain tuple to ``n`` elements by repeating its elements.</span>
+</span><span id="rep_tuple-8"><a href="#rep_tuple-8"><span class="linenos"> 8</span></a>
+</span><span id="rep_tuple-9"><a href="#rep_tuple-9"><span class="linenos"> 9</span></a><span class="sd">    Args:</span>
+</span><span id="rep_tuple-10"><a href="#rep_tuple-10"><span class="linenos">10</span></a><span class="sd">        n: Output element count.</span>
+</span><span id="rep_tuple-11"><a href="#rep_tuple-11"><span class="linenos">11</span></a><span class="sd">        t: Input tuple (or scalar object).</span>
+</span><span id="rep_tuple-12"><a href="#rep_tuple-12"><span class="linenos">12</span></a>
+</span><span id="rep_tuple-13"><a href="#rep_tuple-13"><span class="linenos">13</span></a><span class="sd">    Returns:</span>
+</span><span id="rep_tuple-14"><a href="#rep_tuple-14"><span class="linenos">14</span></a><span class="sd">        Expanded or constrained tuple.</span>
+</span><span id="rep_tuple-15"><a href="#rep_tuple-15"><span class="linenos">15</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="rep_tuple-16"><a href="#rep_tuple-16"><span class="linenos">16</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+</span><span id="rep_tuple-17"><a href="#rep_tuple-17"><span class="linenos">17</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span><span id="rep_tuple-18"><a href="#rep_tuple-18"><span class="linenos">18</span></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
+</span><span id="rep_tuple-19"><a href="#rep_tuple-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="n">t</span>
+</span><span id="rep_tuple-20"><a href="#rep_tuple-20"><span class="linenos">20</span></a>    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Expand or constrain tuple to <code>n</code> elements by repeating its elements.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>n:</strong>  Output element count.</li>
+<li><strong>t:</strong>  Input tuple (or scalar object).</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>Expanded or constrained tuple.</p>
+</blockquote>
+</div>
+
+
+                </section>
     </main>
 <script>
     function escapeHTML(html) {

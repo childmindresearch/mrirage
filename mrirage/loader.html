@@ -27,10 +27,13 @@
                    pattern=".+" required>
 
 
-            <h2>Submodules</h2>
-            <ul>
-                    <li><a href="loader/nifti.html">nifti</a></li>
-            </ul>
+
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="function" href="#get_nifti_cube">get_nifti_cube</a>
+            </li>
+    </ul>
 
 
 
@@ -52,10 +55,59 @@
                         <label class="view-source-button" for="mod-loader-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span> <span class="nn">.nifti</span> <span class="kn">import</span> <span class="n">get_nifti_cube</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;get_nifti_cube&quot;</span><span class="p">]</span>
 </span></pre></div>
 
 
             </section>
+                <section id="get_nifti_cube">
+                            <input id="get_nifti_cube-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_nifti_cube</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">nibabel</span><span class="o">.</span><span class="n">spatialimages</span><span class="o">.</span><span class="n">SpatialImage</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">Union</span><span class="p">[</span><span class="n">mrirage</span><span class="o">.</span><span class="n">datacube</span><span class="o">.</span><span class="n">datacube</span><span class="o">.</span><span class="n">Datacube</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span>:</span></span>
+
+                <label class="view-source-button" for="get_nifti_cube-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#get_nifti_cube"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_nifti_cube-12"><a href="#get_nifti_cube-12"><span class="linenos">12</span></a><span class="k">def</span> <span class="nf">get_nifti_cube</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NibabelImage</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Datacube</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+</span><span id="get_nifti_cube-13"><a href="#get_nifti_cube-13"><span class="linenos">13</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="get_nifti_cube-14"><a href="#get_nifti_cube-14"><span class="linenos">14</span></a><span class="sd">    Load a nifti image into a Datacube.</span>
+</span><span id="get_nifti_cube-15"><a href="#get_nifti_cube-15"><span class="linenos">15</span></a>
+</span><span id="get_nifti_cube-16"><a href="#get_nifti_cube-16"><span class="linenos">16</span></a><span class="sd">    Args:</span>
+</span><span id="get_nifti_cube-17"><a href="#get_nifti_cube-17"><span class="linenos">17</span></a><span class="sd">        image: Image to load.</span>
+</span><span id="get_nifti_cube-18"><a href="#get_nifti_cube-18"><span class="linenos">18</span></a>
+</span><span id="get_nifti_cube-19"><a href="#get_nifti_cube-19"><span class="linenos">19</span></a><span class="sd">    Returns:</span>
+</span><span id="get_nifti_cube-20"><a href="#get_nifti_cube-20"><span class="linenos">20</span></a><span class="sd">        Datacube containing the image.</span>
+</span><span id="get_nifti_cube-21"><a href="#get_nifti_cube-21"><span class="linenos">21</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_nifti_cube-22"><a href="#get_nifti_cube-22"><span class="linenos">22</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="get_nifti_cube-23"><a href="#get_nifti_cube-23"><span class="linenos">23</span></a>        <span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">nifti1</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</span><span id="get_nifti_cube-24"><a href="#get_nifti_cube-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">(</span><span class="n">caching</span><span class="o">=</span><span class="s2">&quot;unchanged&quot;</span><span class="p">),</span> <span class="n">img</span><span class="o">.</span><span class="n">affine</span><span class="p">)</span>
+</span><span id="get_nifti_cube-25"><a href="#get_nifti_cube-25"><span class="linenos">25</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">NibabelImage</span><span class="p">):</span>
+</span><span id="get_nifti_cube-26"><a href="#get_nifti_cube-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="n">Datacube</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">(),</span> <span class="n">image</span><span class="o">.</span><span class="n">affine</span><span class="p">)</span>
+</span><span id="get_nifti_cube-27"><a href="#get_nifti_cube-27"><span class="linenos">27</span></a>    <span class="k">return</span> <span class="n">image</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Load a nifti image into a Datacube.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>image:</strong>  Image to load.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>Datacube containing the image.</p>
+</blockquote>
+</div>
+
+
+                </section>
     </main>
 <script>
     function escapeHTML(html) {
