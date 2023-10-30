@@ -16,14 +16,14 @@ class Layer(ABC):
 
     def __init__(
         self, style: Optional[Style] = None, legend: bool = False, z_index: int = 0
-    ):
+    ) -> None:
         self.style: Optional[Style] = style
         self._default_style: Optional[Style] = None
         self._draw_style: Optional[Style] = None
         self.legend = legend
         self.z_index = z_index
 
-    def _set_default_style(self, default_style: Style):
+    def _set_default_style(self, default_style: Style) -> None:
         self._default_style = default_style
 
     def pre_render(self, base_style: Style) -> None:
@@ -44,7 +44,7 @@ class Layer(ABC):
                     base_style
                 )
 
-    def render_legend(self, ax: plt.Axes, vertical: bool):
+    def render_legend(self, ax: plt.Axes, vertical: bool) -> None:
         pass
 
     def has_legend(self) -> bool:
@@ -53,22 +53,28 @@ class Layer(ABC):
     def get_z_index(self) -> int:
         return self.z_index
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        assert isinstance(other, Layer)
         return self.get_z_index() == other.get_z_index()
 
-    def __ne__(self, other):
+    def __ne__(self, other: object) -> bool:
+        assert isinstance(other, Layer)
         return self.get_z_index() != other.get_z_index()
 
-    def __lt__(self, other):
+    def __lt__(self, other: object) -> bool:
+        assert isinstance(other, Layer)
         return self.get_z_index() < other.get_z_index()
 
-    def __le__(self, other):
+    def __le__(self, other: object) -> bool:
+        assert isinstance(other, Layer)
         return self.get_z_index() <= other.get_z_index()
 
-    def __gt__(self, other):
+    def __gt__(self, other: object) -> bool:
+        assert isinstance(other, Layer)
         return self.get_z_index() > other.get_z_index()
 
-    def __ge__(self, other):
+    def __ge__(self, other: object) -> bool:
+        assert isinstance(other, Layer)
         return self.get_z_index() >= other.get_z_index()
 
     def view_render(  # pylint: disable=unused-argument

@@ -21,7 +21,7 @@ class Style:  # pylint: disable=too-many-instance-attributes
     line_style: str | None = None
     cap_style: str | None = None
 
-    def render(self, *args: Any, plt_ax: plt.Axes, **kwargs: Any):
+    def render(self, *args: Any, plt_ax: plt.Axes, **kwargs: Any) -> list[plt.Line2D]:
         return plt_ax.plot(
             *args,
             color=self.color,
@@ -30,20 +30,22 @@ class Style:  # pylint: disable=too-many-instance-attributes
             solid_capstyle=self.cap_style,
             dash_capstyle=self.cap_style,
             alpha=self.alpha,
-            **kwargs
+            **kwargs,
         )
 
-    def render_text(self, *args: Any, plt_ax: plt.Axes, **kwargs: Any):
+    def render_text(self, *args: Any, plt_ax: plt.Axes, **kwargs: Any) -> plt.Text:
         return plt_ax.text(
             *args,
             fontsize=self.font_size,
             family=self.font_family,
             math_fontfamily=self.font_family_math,
             color=self.color,
-            **kwargs
+            **kwargs,
         )
 
-    def render_set_title(self, label: str, *args: Any, plt_ax: plt.Axes, **kwargs: Any):
+    def render_set_title(
+        self, label: str, *args: Any, plt_ax: plt.Axes, **kwargs: Any
+    ) -> None:
         # mypy bug: https://github.com/python/mypy/issues/6799
         plt_ax.set_title(
             *args,
@@ -52,16 +54,16 @@ class Style:  # pylint: disable=too-many-instance-attributes
             family=self.font_family,
             math_fontfamily=self.font_family_math,
             color="black" if self.color is None else self.color,
-            **kwargs
+            **kwargs,
         )
 
-    def render_set_ticklabels(self, plt_ax: plt.Axes):
+    def render_set_ticklabels(self, plt_ax: plt.Axes) -> None:
         for lab in plt_ax.get_xticklabels():
             lab.set_fontproperties({"family": self.font_family})  # type: ignore
         for lab in plt_ax.get_yticklabels():
             lab.set_fontproperties({"family": self.font_family})  # type: ignore
 
-    def override(self, other: "Style"):
+    def override(self, other: "Style") -> "Style":
         fields = dataclasses.fields(Style)
         re = Style()
         for f in fields:

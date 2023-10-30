@@ -1,15 +1,17 @@
-from typing import Tuple, Union
+from typing import Sequence, Tuple, Union
 
 import numpy as np
 
 
-def bounds_manual(p1, p2):
+def bounds_manual(p1: Sequence, p2: Sequence) -> np.ndarray:
     return np.vstack((np.vstack((p1, p2)).T, (0, 0)))
 
 
-def bounds_where(bool_image, affine, margin=0.0):
+def bounds_where(
+    bool_image: np.ndarray, affine: np.ndarray, margin: float = 0.0
+) -> np.ndarray:
     wpos = np.where(bool_image)
-    wpos = np.vstack(wpos + (np.ones(wpos[0].shape[0]),))
+    wpos = np.vstack(wpos + (np.ones(wpos[0].shape[0]),))  # type: ignore
 
     wpos_trans = np.dot(affine, wpos)
 
@@ -41,5 +43,5 @@ def bounds_cube(
     )
 
 
-def bounds_mni_cube():
+def bounds_mni_cube() -> np.ndarray:
     return bounds_cube(100, (0, -17, 10))

@@ -11,7 +11,7 @@ from ...common import rep_tuple
 from .layer import Layer
 
 
-def _get_axlims(plt_ax: plt.Axes):
+def _get_axlims(plt_ax: plt.Axes) -> Tuple[float, float, float, float]:
     xmin, xmax = plt_ax.get_xlim()  # todo min bounds?
     ymin, ymax = plt_ax.get_ylim()
     return xmin, xmax, ymin, ymax
@@ -20,18 +20,20 @@ def _get_axlims(plt_ax: plt.Axes):
 class LayerCrossBase(Layer, ABC):
     def __init__(
         self,
-        padding_inner=0.0,
-        padding_outer=0.0,
+        padding_inner: float = 0.0,
+        padding_outer: float = 0.0,
         style: Optional[Style] = None,
-        legend=False,
+        legend: bool = False,
         z_index: int = 0,
-    ):
+    ) -> None:
         super().__init__(legend=legend, z_index=z_index, style=style)
         self.padding_inner = padding_inner
         self.padding_outer = padding_outer
         self._set_default_style(Style(cap_style="round"))
 
-    def _render_cross(self, plt_ax: plt.Axes, view_axis: int, point: np.ndarray):
+    def _render_cross(
+        self, plt_ax: plt.Axes, view_axis: int, point: np.ndarray
+    ) -> bool:
         var_dims = np.concatenate(
             [np.arange(3) != view_axis, np.full((len(point) - 3,), False)]
         )
@@ -76,7 +78,7 @@ class LayerCrossBase(Layer, ABC):
 
         return True
 
-    def render_legend(self, ax: plt.Axes, vertical: bool):
+    def render_legend(self, ax: plt.Axes, vertical: bool) -> None:
         assert self._draw_style is not None
         self._draw_style.render([0, 1], [0, 0], plt_ax=ax)
         ax.axis("off")
@@ -119,12 +121,12 @@ class LayerCross(LayerCrossBase):
 class LayerLine(Layer):
     def __init__(
         self,
-        padding_inner=0.0,
-        padding_outer=0.0,
+        padding_inner: float = 0.0,
+        padding_outer: float = 0.0,
         style: Optional[Style] = None,
-        legend=False,
+        legend: bool = False,
         z_index: int = 0,
-    ):
+    ) -> None:
         super().__init__(legend=legend, z_index=z_index, style=style)
         self.padding_inner = padding_inner
         self.padding_outer = padding_outer
@@ -165,7 +167,7 @@ class LayerLine(Layer):
 
         return True
 
-    def render_legend(self, ax: plt.Axes, vertical: bool):
+    def render_legend(self, ax: plt.Axes, vertical: bool) -> None:
         assert self._draw_style is not None
         self._draw_style.render([0, 1], [0, 0], plt_ax=ax)
         ax.axis("off")
@@ -179,7 +181,7 @@ class LayerLR(Layer):
         label: Tuple[str, str] = ("L", "R"),
         style: Optional[Style] = None,
         z_index: int = 0,
-    ):
+    ) -> None:
         super().__init__(legend=False, z_index=z_index, style=style)
         self.label_left, self.label_right = label
         self.pad_x, self.pad_y = rep_tuple(2, padding)
@@ -228,7 +230,7 @@ class LayerCoordinate(Layer):
         padding: Union[float, Tuple[float, float]] = 0,
         label: Tuple[str, str] = ("L", "R"),
         z_index: int = 0,
-    ):
+    ) -> None:
         super().__init__(legend=False, z_index=z_index, style=style)
         self.label_left, self.label_right = label
         self.pad_x, self.pad_y = (

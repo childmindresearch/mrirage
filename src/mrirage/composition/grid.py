@@ -23,7 +23,7 @@ class CompositionDom(Composition, ABC):
         dpi: int = 200,
         color_bg: Optional[str] = None,
         style: Optional[Style] = None,
-    ):
+    ) -> None:
         super().__init__(
             layers=layers, views=views, style=style, figure_size=figure_size, dpi=dpi
         )
@@ -66,7 +66,7 @@ class CompositionDom(Composition, ABC):
 
         return True
 
-    def get_figure(self):
+    def get_figure(self) -> Optional[plt.Figure]:
         return self._figure
 
 
@@ -80,12 +80,12 @@ class CompositionGrid(CompositionDom):
         layers: Optional[List[Layer]] = None,
         views: Optional[List[View]] = None,
         figure_size: Optional[Union[float, Tuple[float, float]]] = None,
-        dpi=200,
+        dpi: int = 200,
         color_bg: Optional[str] = None,
-        nbreak=3,
+        nbreak: int = 3,
         legend_scale: float = 0.6,
         style: Optional[Style] = None,
-    ):
+    ) -> None:
         """
         Args:
             layers: Layers to add to the composition.
@@ -109,7 +109,9 @@ class CompositionGrid(CompositionDom):
         self.nbreak = nbreak
         self.legend_scale = legend_scale
 
-    def _make_doc_legend(self, legend_entries: List[Layer]):
+    def _make_doc_legend(
+        self, legend_entries: List[Layer]
+    ) -> Tuple[mdom.MplDocument, List[mdom.MplElement], List[mdom.MplElement]]:
         view_containers = [
             mdom.MplMargin(left=0.1, right=0.1, bottom=0.1, top=0.1, fixed=True)
             for _ in self.views
@@ -152,7 +154,9 @@ class CompositionGrid(CompositionDom):
             legend_elements,
         )
 
-    def _make_doc_no_legend(self):
+    def _make_doc_no_legend(
+        self
+    ) -> Tuple[mdom.MplDocument, list[mdom.MplElement], list]:
         view_containers = [
             mdom.MplMargin(left=0.1, right=0.1, bottom=0.1, top=0.1, fixed=True)
             for _ in self.views

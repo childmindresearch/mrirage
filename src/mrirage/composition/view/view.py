@@ -21,7 +21,7 @@ class View:  # pylint: disable=too-few-public-methods
         origin: Optional[fine.types.SamplerPointLike] = None,
         points: Optional[fine.types.SamplerPointsLike] = None,
         axis: Optional[int] = None,
-    ):
+    ) -> None:
         self.view_axis = view_axis
         self.bounds = bounds
         self.origin = None if origin is None else fine.types.sampler_point_3d(origin)

@@ -26,16 +26,18 @@ class LayerVoxel(Layer):
         ] = None,
         alpha: Optional[float] = None,
         color_scale: Optional["ColorScale"] = None,
-        interp_data="nearest",
-        interp_screen="nearest",
+        interp_data: str = "nearest",
+        interp_screen: str = "nearest",
         style: Optional[Style] = None,
         legend: bool = False,
         legend_label: Optional[str] = None,
         z_index: int = 0,
-    ):
+    ) -> None:
         super().__init__(legend=legend, z_index=z_index, style=style)
         self.data: Datacube = get_nifti_cube(data)
-        self.alpha_map: Optional[Datacube] = get_nifti_cube(alpha_map)
+        self.alpha_map: Optional[
+            Union[Datacube, Callable[[Datacube], Datacube]]
+        ] = get_nifti_cube(alpha_map)
         self.alpha: float = 1.0 if alpha is None else alpha
         self.color_scale: ColorScale = (
             ColorScale() if color_scale is None else color_scale
@@ -75,6 +77,7 @@ class LayerVoxel(Layer):
 
         sample_alpha = None
         if self.alpha_map is not None:
+            assert isinstance(self.alpha_map, Datacube)
             sample_alpha = fine.sample_2d(
                 texture=self.alpha_map.image,  # type: ignore
                 affine=self.alpha_map.affine,
@@ -103,7 +106,7 @@ class LayerVoxel(Layer):
         )
         return True
 
-    def render_legend(self, ax, vertical: bool):
+    def render_legend(self, ax: plt.Axes, vertical: bool) -> None:
         assert self._draw_style is not None
         self.color_scale.render_legend(
             ax, vertical, self.legend_label, alpha=self.alpha, style=self._draw_style
@@ -119,15 +122,20 @@ class ColorScale:
     vmin: Optional[float] = None
     vmax: Optional[float] = None
 
-    def attach_image(self, image: LayerVoxel):
+    def attach_image(self, image: LayerVoxel) -> None:
         if self.vmin is None:
             self.vmin = np.nanmin(image.data.image)
         if self.vmax is None:
             self.vmax = np.nanmax(image.data.image)
 
     def render_legend(
-        self, ax, vertical: bool, label: Optional[str], alpha: float, style: Style
-    ):
+        self,
+        ax: plt.Axes,
+        vertical: bool,
+        label: Optional[str],
+        alpha: float,
+        style: Style,
+    ) -> None:
         image_scale = plt.cm.ScalarMappable(
             norm=pltcol.Normalize(vmin=self.vmin, vmax=self.vmax), cmap=self.cmap
         )
@@ -145,7 +153,7 @@ class ColorScale:
 class ColorScaleFromName(ColorScale):
     def __init__(
         self, name: str, vmin: Optional[float] = None, vmax: Optional[float] = None
-    ):
+    ) -> None:
         super().__init__(vmin=vmin, vmax=vmax)
         self.cmap = plt.get_cmap(name)
 
@@ -153,13 +161,18 @@ class ColorScaleFromName(ColorScale):
 class ColorScaleSolid(ColorScale):
     def __init__(
         self, color: str, vmin: Optional[float] = None, vmax: Optional[float] = None
-    ):
+    ) -> None:
         super().__init__(vmin=vmin, vmax=vmax)
         self.cmap = pltcol.ListedColormap([color])
 
     def render_legend(
-        self, ax, vertical: bool, label: Optional[str], alpha: float, style: Style
-    ):
+        self,
+        ax: plt.Axes,
+        vertical: bool,
+        label: Optional[str],
+        alpha: float,
+        style: Style,
+    ) -> None:
         ax.imshow(
             np.array([[0]]),
             vmin=0,
@@ -197,6 +210,7 @@ class LayerVoxelGlass(LayerVoxel):
 
         raster_alpha_2d = None
         if self.alpha_map is not None:
+            assert isinstance(self.alpha_map, Datacube)
             sample_alpha = fine.sample_3d(
                 texture=self.alpha_map.image,
                 affine=self.alpha_map.affine,

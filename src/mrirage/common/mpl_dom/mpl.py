@@ -1,44 +1,47 @@
 """
-This module provides a simple HTML-DOM-like structure for constructing matplotlib figures.
-Because the matplotlib API is bad at margins and alignment, this module provides an
-overly complicated way to construct a figure with a grid of axes, with margins and dividers.
+This module provides a simple HTML-DOM-like structure for constructing
+matplotlib figures.
+Because the matplotlib API is bad at margins and alignment, this module
+provides an
+overly complicated way to construct a figure with a grid of axes, with
+margins and dividers.
 """
 
 from math import ceil
-from typing import Any, Generator, Iterable, List, Optional, Sequence
+from typing import Any, Generator, List, Optional, Sequence, Tuple
 
 import matplotlib.pyplot as plt
 
 
 class Box:
-    def __init__(self, x: float = 0, y: float = 0, w: float = 1, h: float = 1):
+    def __init__(self, x: float = 0, y: float = 0, w: float = 1, h: float = 1) -> None:
         self.x = x
         self.y = y
         self.w = w
         self.h = h
 
-    def clone(self):
+    def clone(self) -> "Box":
         return Box(self.x, self.y, self.w, self.h)
 
-    def as_tuple(self):
+    def as_tuple(self) -> Tuple[float, float, float, float]:
         return self.x, self.y, self.w, self.h
 
-    def valid(self, min_value=0, max_value=1):
+    def valid(self, min_value: int | float = 0, max_value: int | float = 1) -> bool:
         t = self.as_tuple()
         for i in t:
             if i < min_value or i > max_value:
                 return False
         return True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self.as_tuple())
 
 
 class MplElement:
-    def __init__(self):
+    def __init__(self) -> None:
         self.pos = Box()
 
-    def pretty_str(self, indent="", indent_add="  ") -> str:
+    def pretty_str(self, indent: str = "", indent_add: str = "  ") -> str:
         if len(self.get_children()) == 0:
             return f"{indent}{self.get_descriptor()}"
 
@@ -48,16 +51,16 @@ class MplElement:
         )
         return f"{indent}{self.get_descriptor()}[\n{cs}\n{indent}]"
 
-    def pretty_print(self, indent="", indent_add="  "):
+    def pretty_print(self, indent: str = "", indent_add: str = "  ") -> None:
         print(self.pretty_str(indent=indent, indent_add=indent_add))
 
     def get_children(self) -> Sequence["MplElement"]:
         return []
 
-    def get_descriptor(self):
+    def get_descriptor(self) -> str:
         return str(self.pos)
 
-    def align_children(self, fix_w: float, fix_h: float):
+    def align_children(self, fix_w: float, fix_h: float) -> None:
         pass
 
     def align_recursive(self, fix_w: float, fix_h: float) -> bool:
@@ -68,7 +71,7 @@ class MplElement:
                 children_valid = False
         return children_valid
 
-    def align(self):
+    def align(self) -> bool:
         return self.align_recursive(1, 1)
 
     def create_axis(self, figure: plt.Figure) -> plt.Axes:
@@ -84,13 +87,13 @@ class MplElement:
     ) -> List[plt.Axes]:
         return [ae.create_axis(figure) for ae in axes_elements]
 
-    def children_valid(self):
+    def children_valid(self) -> bool:
         for c in self.get_children():
             if not c.pos.valid():
                 return False
         return True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.get_descriptor()
 
     def iter_recursive(self) -> Generator["MplElement", Any, None]:
@@ -106,7 +109,7 @@ class MplDocument(MplElement):
         width: float = 10,
         height: float = 8,
         dpi: float = 72,
-    ):
+    ) -> None:
         super().__init__()
         self.width: float = width
         self.height: float = height
@@ -117,13 +120,13 @@ class MplDocument(MplElement):
     def get_children(self) -> List["MplElement"]:
         return [self.root]
 
-    def align_children(self, fix_w: float, fix_h: float):
+    def align_children(self, fix_w: float, fix_h: float) -> None:
         self.root.pos = self.pos.clone()
 
     def align(self) -> bool:
         return self.align_recursive(fix_w=self.width, fix_h=self.height)
 
-    def get_descriptor(self):
+    def get_descriptor(self) -> str:
         return f"Document{self.pos}"
 
     def make_figure(self) -> plt.Figure:
@@ -137,8 +140,8 @@ class MplDivider(MplElement):
         second: Optional[MplElement] = None,
         vertical: bool = False,
         division: float = 0.5,
-        fixed=False,
-    ):
+        fixed: bool = False,
+    ) -> None:
         super().__init__()
         self.vertical = vertical
         self.division = division
@@ -149,12 +152,15 @@ class MplDivider(MplElement):
     def get_children(self) -> List["MplElement"]:
         return [self.first, self.second]
 
-    def get_descriptor(self):
-        return f"Divider{self.pos}(fixed={self.fixed}, vertical={self.vertical}, division={self.division})"
+    def get_descriptor(self) -> str:
+        return (
+            f"Divider{self.pos}(fixed={self.fixed}, "
+            "vertical={self.vertical}, division={self.division})"
+        )
 
     def align_children(
         self, fix_w: float, fix_h: float
-    ):  # todo avoid instance creation
+    ) -> None:  # todo avoid instance creation
         if self.fixed:
             ref_w = 1 / fix_w
             ref_h = 1 / fix_h
@@ -181,8 +187,8 @@ class MplMargin(MplElement):
         right: float = 0,
         top: float = 0,
         bottom: float = 0,
-        fixed=False,
-    ):
+        fixed: bool = False,
+    ) -> None:
         super().__init__()
         self.left = left
         self.right = right
@@ -194,13 +200,13 @@ class MplMargin(MplElement):
     def get_children(self) -> List["MplElement"]:
         return [self.child]
 
-    def get_descriptor(self):
+    def get_descriptor(self) -> str:
         return (
             f"Margin{self.pos}(fixed={self.fixed}, left={self.left}, "
             f"right={self.right}, top={self.top}, bottom={self.bottom})"
         )
 
-    def align_children(self, fix_w: float, fix_h: float):
+    def align_children(self, fix_w: float, fix_h: float) -> None:
         if self.fixed:
             ref_w = 1 / fix_w
             ref_h = 1 / fix_h
@@ -220,7 +226,7 @@ class MplGrid(MplElement):
         children: Optional[Sequence["MplElement"]] = None,
         nbreak: int = 3,
         vertical: bool = False,
-    ):
+    ) -> None:
         super().__init__()
         self.children: Sequence["MplElement"] = [] if children is None else children
         self.nbreak = nbreak
@@ -229,10 +235,10 @@ class MplGrid(MplElement):
     def get_children(self) -> Sequence["MplElement"]:
         return self.children
 
-    def get_descriptor(self):
+    def get_descriptor(self) -> str:
         return f"Grid{self.pos}()"
 
-    def align_children(self, fix_w: float, fix_h: float):
+    def align_children(self, fix_w: float, fix_h: float) -> None:
         nrows = ceil(len(self.children) / self.nbreak)
         ncols = min(len(self.children), self.nbreak)
 
@@ -249,7 +255,7 @@ class MplGrid(MplElement):
             child.pos.h = gh
 
 
-def _debug_axes(axes: List[plt.Axes]):
+def _debug_axes(axes: List[plt.Axes]) -> List[plt.Axes]:
     color_map: Any = plt.get_cmap("Set1")
     for i, ax in enumerate(axes):
         col = color_map.colors[i % len(color_map.colors)]
@@ -262,7 +268,9 @@ def _debug_axes(axes: List[plt.Axes]):
     return axes
 
 
-def _debug_document(doc: MplDocument, fig: Optional[plt.Figure] = None, align=True):
+def _debug_document(
+    doc: MplDocument, fig: Optional[plt.Figure] = None, align: bool = True
+) -> None:
     if align:
         doc.align()
     fig = fig if fig is not None else doc.make_figure()
@@ -270,7 +278,7 @@ def _debug_document(doc: MplDocument, fig: Optional[plt.Figure] = None, align=Tr
     fig.show()
 
 
-def main():
+def main() -> None:
     doc = MplDocument(width=10, height=8, dpi=72)
 
     view_containers = [

@@ -39,9 +39,9 @@ def quick_xyz(
     origin: Optional[fine.types.SamplerPointLike] = None,
     bounds: Optional[np.ndarray] = None,
     figure_size: Optional[Union[float, Tuple[float, float]]] = None,
-    dpi=200,
-    color_bg=None,
-    nbreak=3,
+    dpi: int = 200,
+    color_bg: Optional[str] = None,
+    nbreak: int = 3,
     legend_scale: float = 0.6,
     style: Optional[Style] = None,
 ) -> CompositionGrid:

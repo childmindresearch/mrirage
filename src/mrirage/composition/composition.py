@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple, Union
 
@@ -27,7 +28,7 @@ class Composition(ABC):
         style: Optional[Style] = None,
         figure_size: Optional[Union[float, Tuple[float, float]]] = None,
         dpi: int = 200,
-    ):
+    ) -> None:
         self.layers: List[Layer] = [] if layers is None else layers
         self.views: List[View] = [] if views is None else views
         self.style = Style() if style is None else style
@@ -44,23 +45,25 @@ class Composition(ABC):
         return self.get_figure()
 
     @abstractmethod
-    def _render_figure(self):
-        pass
+    def _render_figure(self) -> bool:
+        return False
 
     @abstractmethod
-    def get_figure(self) -> plt.Figure:
+    def get_figure(self) -> Optional[plt.Figure]:
         pass
 
-    def append(self, element: Union[Layer, View]):
+    def append(self, element: Union[Layer, View]) -> None:
         if isinstance(element, Layer):
             self.layers.append(element)
         if isinstance(element, View):
             self.views.append(element)
 
-    def render_show(self):
-        self.render().show()
-        return self.get_figure()
+    def render_show(self) -> None:
+        fig = self.render()
+        assert fig is not None, "Figure is None"
+        fig.show()
 
-    def render_to_file(self, file_name):
-        self.render()
-        return self.get_figure().savefig(fname=file_name, dpi=self.dpi)
+    def render_to_file(self, file_name: Union[str, os.PathLike]) -> None:
+        fig = self.render()
+        assert fig is not None, "Figure is None"
+        fig.savefig(fname=file_name, dpi=self.dpi)
