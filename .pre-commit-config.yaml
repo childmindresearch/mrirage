@@ -11,7 +11,7 @@ repos:
     rev: v1.6.1
     hooks:
       - id: mypy
-        args: [--ignore-missing-imports]
+        args: [--config-file pyproject.toml]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
