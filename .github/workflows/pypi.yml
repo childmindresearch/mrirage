@@ -27,6 +27,7 @@ jobs:
           python-version: 3.11
 
       - name: Skip if version did not change.
+        id: check_version
         run: |
           version_change=$(git diff -r HEAD^1 pyproject.toml | grep -E "^(\+|-)version =")
           if [[ -z "$version_change" ]]; then
