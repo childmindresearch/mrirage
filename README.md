@@ -9,7 +9,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/cmi-dair/mrirage/blob/master/LICENSE)
 [![pages](https://img.shields.io/badge/api-docs-blue)](https://cmi-dair.github.io/mrirage)
 
-`mrirage` (pronounced _mirage_) is a scientific visualization library for Python 
+`mrirage` (pronounced _mirage_) is a scientific visualization library for Python
 with the goal of creating and automating publication ready figures from 3D voxel MRI images.
 
 ## Features
