@@ -30,19 +30,22 @@ jobs:
         run: |
           version_change=$(git diff -r HEAD^1 pyproject.toml | grep -E "^(\+|-)version =")
           if [[ -z "$version_change" ]]; then
-            gh run cancel ${{ github.run_id }}
-            gh run watch ${{ github.run_id }}
+            echo "Version did not change. Skipping the entire workflow."
+            echo "::set-output name=skip_workflow::true"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build package.
+        if: steps.check_version.outputs.skip_workflow != 'true'
         run: |
           python -m pip install poetry
-          poetry install --only main
+          poetry install --only master
           poetry build
 
       - name: Publish to PyPi.
+        id: pypi_publish
+        if: steps.check_version.outputs.skip_workflow != 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
