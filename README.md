@@ -22,4 +22,4 @@ with the goal of creating and automating publication ready figures from 3D voxel
 
 ## Tutorials
 
-To get started [have a look at the tutorials](examples/README.md).
+To get started [have a look at the tutorials](https://github.com/cmi-dair/mrirage/blob/master/examples/README.md).
