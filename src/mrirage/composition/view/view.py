@@ -29,7 +29,6 @@ class View:  # pylint: disable=too-few-public-methods
         self.axis = axis
 
     def render(self, layers: List[Layer], plt_ax: plt.Axes) -> None:
-        assert self.bounds is not None
         for layer in layers:
             layer.view_render(
                 plt_ax=plt_ax,
