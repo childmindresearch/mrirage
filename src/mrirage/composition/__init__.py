@@ -1,6 +1,9 @@
 from .composition import Composition
 from .grid import CompositionGrid
 from .layer import (
+    ColorScale,
+    ColorScaleFromName,
+    ColorScaleSolid,
     Layer,
     LayerCoordinate,
     LayerCross,
@@ -9,9 +12,6 @@ from .layer import (
     LayerLR,
     LayerVoxel,
     LayerVoxelGlass,
-    ColorScale,
-    ColorScaleFromName,
-    ColorScaleSolid,
     Style,
 )
 from .view import View
