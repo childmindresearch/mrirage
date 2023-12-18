@@ -155,7 +155,7 @@ class CompositionGrid(CompositionDom):
         )
 
     def _make_doc_no_legend(
-        self
+        self,
     ) -> Tuple[mdom.MplDocument, list[mdom.MplElement], list]:
         view_containers = [
             mdom.MplMargin(left=0.1, right=0.1, bottom=0.1, top=0.1, fixed=True)
