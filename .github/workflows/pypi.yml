@@ -1,34 +1,34 @@
-name: "Publish to PyPi"
+name: Publish to PyPi
 
 permissions:
-  actions: "write"
+  actions: write
 
 on:
   push:
     tags:
-     - '*'
+    - '*'
 
 jobs:
   pypi-release:
-    name: "PyPi Release"
-    runs-on: "ubuntu-latest"
+    name: PyPi Release
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Install poetry
-        run: pipx install poetry
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-          cache: poetry
-      - run: |
-          poetry install
-          poetry build
+    - uses: actions/checkout@v3
+    - name: Install poetry
+      run: pipx install poetry
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: poetry
+    - run: |
+        poetry install
+        poetry build
 
-      - name: Publish to PyPi.
-        id: pypi_publish
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }}
-          verbose: true
+    - name: Publish to PyPi.
+      id: pypi_publish
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_TOKEN }}
+        verbose: true
