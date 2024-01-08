@@ -32,10 +32,6 @@ pdoc = "^14.1.0"
 [tool.poetry.extras]
 docs = ["pdoc"]
 
-[build-system]
-requires = ["poetry-core>=1.2.0"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.pytest.ini_options]
 pythonpath = [
   "src"
@@ -44,40 +40,39 @@ pythonpath = [
 [tool.ruff]
 ignore-init-module-imports = true
 exclude = [
-    ".bzr",
-    ".direnv",
-    ".eggs",
-    ".git",
-    ".git-rewrite",
-    ".hg",
-    ".mypy_cache",
-    ".nox",
-    ".pants.d",
-    ".pytype",
-    ".ruff_cache",
-    ".svn",
-    ".tox",
-    ".venv",
-    "__pypackages__",
-    "_build",
-    "buck-out",
-    "build",
-    "dist",
-    "node_modules",
-    "venv",
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".git-rewrite",
+  ".hg",
+  ".mypy_cache",
+  ".nox",
+  ".pants.d",
+  ".pytype",
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "__pypackages__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "node_modules",
+  "venv"
 ]
 line-length = 88
 indent-width = 4
-src=["src"]
-
+src = ["src"]
 target-version = "py311"
 
 [tool.ruff.lint]
 select = ["ANN", "E", "F", "I"]
 ignore = [
-  "ANN101", # self should not be annotated.
-  "ANN102", # cls should not be annotated.
-  "ANN401", # Dynamically typed expressions (typing.Any) are disallowed in *args / **kwargs
+  "ANN101",  # self should not be annotated.
+  "ANN102",  # cls should not be annotated.
+  "ANN401"  # Dynamically typed expressions (typing.Any) are disallowed in *args / **kwargs
 ]
 fixable = ["ALL"]
 unfixable = []
@@ -98,5 +93,9 @@ convention = "google"
 [tool.mypy]
 ignore_missing_imports = true
 exclude = [
-  "examples/",
+  "examples/"
 ]
+
+[build-system]
+requires = ["poetry-core>=1.2.0"]
+build-backend = "poetry.core.masonry.api"
