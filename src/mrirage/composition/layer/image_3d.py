@@ -35,9 +35,9 @@ class LayerVoxel(Layer):
     ) -> None:
         super().__init__(legend=legend, z_index=z_index, style=style)
         self.data: Datacube = get_nifti_cube(data)
-        self.alpha_map: Optional[
-            Union[Datacube, Callable[[Datacube], Datacube]]
-        ] = get_nifti_cube(alpha_map)
+        self.alpha_map: Optional[Union[Datacube, Callable[[Datacube], Datacube]]] = (
+            get_nifti_cube(alpha_map)
+        )
         self.alpha: float = 1.0 if alpha is None else alpha
         self.color_scale: ColorScale = (
             ColorScale() if color_scale is None else color_scale
