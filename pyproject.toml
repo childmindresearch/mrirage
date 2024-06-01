@@ -13,7 +13,7 @@ packages = [{include = "mrirage", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.13"
-fineslice = "^0.0.2"
+fineslice = ">=0.0.2,<0.0.4"
 matplotlib = "^3.8.0"
 nibabel = "^5.1.0"
 scipy = "^1.11.3"
